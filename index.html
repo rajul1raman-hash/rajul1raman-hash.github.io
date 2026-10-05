@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rajul Raman | Healthcare-trained business analyst</title>
-<meta name="description" content="Rajul Raman: physiotherapist turned business analyst (PGDM Analytics 2027). Three case files on clinic operations, e-pharmacy funnels and KYC process redesign, built on synthetic data. SQL, Power BI, Excel, requirements.">
+<meta name="description" content="Rajul Raman: physiotherapist turned business analyst (PGDM Analytics 2027). Three case files: a no-show analysis of 110,521 real public appointments, an e-pharmacy funnel (synthetic) and a KYC process redesign. SQL, Power BI, Excel, requirements.">
 <meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#12110E" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://rajul1raman-hash.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Rajul Raman">
 <meta property="og:title" content="Rajul Raman | From patient charts to business charts">
-<meta property="og:description" content="Healthcare-trained business analyst. I diagnose processes and treat them with data. Three case files, synthetic data.">
+<meta property="og:description" content="Healthcare-trained business analyst. I diagnose processes and treat them with data. Three case files, real public data where stated.">
 <meta property="og:url" content="https://rajul1raman-hash.github.io/">
 <meta property="og:image" content="https://rajul1raman-hash.github.io/assets/og.png">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 <meta property="og:image:alt" content="Rajul Raman: an ECG trace turning into a business trend line, with the line 'From patient charts to business charts'.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Rajul Raman | From patient charts to business charts">
-<meta name="twitter:description" content="Healthcare-trained business analyst. Three case files, synthetic data.">
+<meta name="twitter:description" content="Healthcare-trained business analyst. Three case files, real public data where stated.">
 <meta name="twitter:image" content="https://rajul1raman-hash.github.io/assets/og.png">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -65,9 +65,9 @@
     <div class="ecg-wrap" id="ecgwrap">
       <div class="cap" aria-hidden="true">
         <span class="big"><i id="cap1">From patient charts</i><i id="cap2" style="opacity:0">to business charts</i></span>
-        <span class="small mono"><span id="sm1">Lead II &middot; 25 mm/s &middot; 72 bpm</span><span id="sm2" style="opacity:0">Weekly revenue &middot; synthetic clinic &middot; INR k</span></span>
+        <span class="small mono"><span id="sm1">Lead II &middot; 25 mm/s &middot; 72 bpm</span><span id="sm2" style="opacity:0">No-show % by days ahead &middot; real data</span></span>
       </div>
-      <svg id="ecg" role="img" aria-label="An ECG trace that, as you scroll, morphs into a business line chart of weekly revenue."></svg>
+      <svg id="ecg" role="img" aria-label="An ECG trace that, as you scroll, morphs into a line chart of no-show rate by days booked ahead, from a real public dataset."></svg>
     </div>
     <div class="wrap">
       
@@ -83,9 +83,9 @@
     <div class="intro rv">
       <p class="l lede">I trained as a physiotherapist, so I read evidence for a living before I read dashboards. Each case below is framed the way a clinician would write it up: presenting problem, diagnosis, treatment, outcome.</p>
       <div class="r">
-        <p>The data in every case is <strong>synthetic or anonymised</strong>. I generated it for this page, with the effects built in, so the cases demonstrate method (how I frame, query, and communicate), not real-world results. The real outcomes are the three numbers at the top, and they come from my resume.</p>
+        <p>Case 01 uses a <strong>real public dataset</strong> (110,521 appointments), analysed by me. Case 02 uses <strong>synthetic</strong> numbers and Case 03 is an <strong>anonymised</strong> illustration, both labelled as such. My own work outcomes are the three numbers at the top, and they come from my resume.</p>
         <div class="read"><p class="mono mut">Open to business and data analyst roles. Read in 30 seconds:</p>
-          <ol><li><a href="#case-1"><span class="mono acc">Case 01</span> KPI design <i>clinic dashboard, SQL</i></a></li><li><a href="#case-2"><span class="mono acc">Case 02</span> Funnel diagnosis <i>e-pharmacy, cohorts</i></a></li><li><a href="#case-3"><span class="mono acc">Case 03</span> Requirements <i>KYC as-is to to-be, BRD</i></a></li></ol></div>
+          <ol><li><a href="#case-1"><span class="mono acc">Case 01</span> No-show analysis <i>real data, SQL</i></a></li><li><a href="#case-2"><span class="mono acc">Case 02</span> Funnel diagnosis <i>e-pharmacy, cohorts</i></a></li><li><a href="#case-3"><span class="mono acc">Case 03</span> Requirements <i>KYC as-is to to-be, BRD</i></a></li></ol></div>
         <p class="mono" style="margin-top:18px">Operate the evidence: filter it, run the SQL, flip the scenario.</p>
       </div>
     </div>
@@ -97,49 +97,74 @@
 <div class="wrap">
 <article class="case" id="case-1" aria-labelledby="c1-h">
   <div class="case-head rv">
-    <div class="tag mono"><span><b>Case 01</b></span><span>Clinic operations</span><span>Synthetic data &middot; 12 weeks &middot; 4 therapists</span></div>
-    <h3 id="c1-h">Full diaries, <em>stalled</em> revenue.</h3>
+    <div class="tag mono"><span><b>Case 01</b></span><span>No-show analysis</span><span>Real public data &middot; 110,521 appointments</span></div>
+    <h3 id="c1-h">One in five booked slots <em>goes unused.</em></h3>
   </div>
 
   <div class="stage-row rv">
-    <div class="lab mono"><div>01 Presenting problem<small>What the owner could see</small></div></div>
+    <div class="lab mono"><div>01 Presenting problem<small>What the operations manager sees</small></div></div>
     <div class="body">
-      <p class="big">A four-therapist physiotherapy clinic looked busy every week, yet revenue would not move and nobody could say why.</p>
-      <p>Appointments, no-shows, therapist hours and invoices lived in separate places, so the owner had volume but no view of what a booked slot was actually worth. I defined four numbers to answer with: booked appointments, no-show rate, share of therapist capacity used, and revenue.</p>
+      <p class="big">20.2% of booked appointments end in a no-show. The diary looks full; a fifth of it is empty chairs.</p>
+      <p>Framed as a clinic-operations brief: which no-shows are predictable, which lever is worth pulling, and what we would measure to know it worked. I took a real public dataset and answered it with SQL.</p>
+      <p class="note"><strong>Real public dataset, my analysis.</strong> &ldquo;Medical Appointment No Shows&rdquo;, Joni Hoppen and Aquarela Analytics, on <a href="https://www.kaggle.com/datasets/joniarroba/noshowappointments">Kaggle</a>, licence <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>. 110,527 appointments at public health facilities in Brazil, 29 Apr to 8 Jun 2016. I loaded it into SQLite, dropped 6 rows (1 impossible age, 5 booked after the visit date) and ship only a 315-cell aggregate here, not the raw file. Build script: <span class="mono" style="text-transform:none">tools/build_noshow.py</span>.</p>
     </div>
   </div>
 
   <div class="stage-row rv">
-    <div class="lab mono"><div>02 Diagnosis<small>Slice the diary until the leak shows</small></div></div>
+    <div class="lab mono"><div>02 Diagnosis<small>Three findings, then the dashboard behind them</small></div></div>
     <div class="body">
-      <div class="filters" role="group" aria-label="Dashboard filters">
-        <fieldset><legend class="mono">Therapist</legend><div class="seg" id="f-th"></div></fieldset>
-        <fieldset><legend class="mono">Visit type</legend><div class="seg" id="f-vt"></div></fieldset>
-        <fieldset><legend class="mono">Booked ahead</legend><div class="seg" id="f-ld"></div></fieldset>
+      <ol class="finds">
+        <li><span class="mono acc">Finding 1 / lead time</span><b>The longer ahead a slot is booked, the likelier it is wasted.</b> No-show rate climbs from <strong>4.6%</strong> for same-day bookings to <strong>33.0%</strong> for bookings 31+ days out. Bookings made 8+ days ahead are <strong>36% of volume but 57% of all no-shows</strong>.</li>
+        <li><span class="mono acc">Finding 2 / SMS reminders</span><b>The raw numbers say SMS makes things worse. They are misleading.</b> Patients who got an SMS no-showed more (27.6% vs 16.7%), but SMS was only ever sent for bookings made 3+ days ahead; none of the 50,500 bookings made 0 to 2 days ahead (the safest ones) got one. Compare like with like and the sign flips: <strong>SMS recipients no-show 2.8 to 7.3 points less in every lead-time band</strong>. Observational, so a hint to test, not proof.</li>
+        <li><span class="mono acc">Finding 3 / who</span><b>Young adults miss most, and the weekday does not matter.</b> 13 to 24 year-olds no-show at <strong>25.6%</strong>, over 70s at <strong>15.6%</strong>. Monday to Friday sit within 19.3 to 21.2%: with this many appointments the gap is real but too small to act on, so I would not build a weekday rule. I also looked at prior no-show history (21.7% for patients with a prior no-show, 21.7% for first-seen patients, 16.0% for patients with prior attended visits only); the data window is only 6 weeks, so history is too thin to rely on and it is not in the dashboard.</li>
+      </ol>
+      <p class="mono mut" style="margin:30px 0 10px">Explore the aggregate (filters apply to every number below)</p>
+      <div class="dash" id="dash">
+        <div class="filters" role="group" aria-label="Dashboard filters">
+          <fieldset><legend class="mono">Age band</legend><div class="seg" id="f-age"></div></fieldset>
+          <fieldset><legend class="mono">Booked ahead</legend><div class="seg" id="f-lead"></div></fieldset>
+          <fieldset><legend class="mono">SMS reminder</legend><div class="seg" id="f-sms"></div></fieldset>
+        </div>
+        <div class="kpis" id="kpis" aria-live="polite"></div>
+        <div class="metrics" role="group" aria-label="Break the rate down by" id="metrics"></div>
+        <div class="chart" id="chart1"></div>
+        <p class="mono mut chartnote" id="chart1-note"></p>
       </div>
-      <div class="kpis" id="kpis" aria-live="polite"></div>
-      <div class="metrics" role="group" aria-label="Metric shown in chart" id="metrics"></div>
-      <div class="chart" id="chart1"></div>
-      <p class="mono mut" style="margin:6px 0 0;font-size:11px" id="chart1-note"></p>
-      <ul class="seglist" id="seglist" aria-label="No-show rate by segment, weeks 1 to 6"></ul>
-      <p style="margin-top:22px">Cut by visit type and booking lead time, the pattern isolates itself: <strong>first visits booked more than five days ahead no-show at <span id="d-hot">27.6%</span></strong> in weeks 1&ndash;6, against <span id="d-rest">4.9&ndash;11.4%</span> for every other segment. Try the filters: pick &ldquo;First visit&rdquo; and &ldquo;&gt;5 days&rdquo;.</p>
+      <p class="mono mut" style="margin:34px 0 10px">The SMS trap: first the crude comparison (all bookings), then like for like within each lead-time band (3+ days ahead)</p>
+      <div id="smspairs" class="pairs"></div>
       <div class="sql" id="sql1"></div>
     </div>
   </div>
 
   <div class="stage-row rv">
-    <div class="lab mono"><div>03 Treatment<small>The smallest change that hits the leak</small></div></div>
+    <div class="lab mono"><div>03 Treatment<small>What I would recommend, and how to prove it</small></div></div>
     <div class="body">
-      <p>From week 7 (the dashed line on the chart): an automated reminder for any visit booked more than five days ahead, and up to two overbooked slots per therapist per week on far-ahead first visits, so a no-show no longer leaves an empty hour. In the model, nothing else changes: same therapists, same fees, same hours.</p>
+      <table class="recs">
+        <thead><tr><th>Recommendation</th><th>Evidence in the data</th><th>How to test it</th></tr></thead>
+        <tbody>
+          <tr><td><b>1. Reconfirm long-lead bookings.</b> A confirmation message at 48 hours for anything booked 8+ days ahead; unconfirmed slots released to a waitlist at 24 hours.</td><td>8+ day bookings: 39,774 appointments, 12,750 no-shows (57% of the total from 36% of bookings).</td><td>Run in one clinic for 4 weeks against a matched clinic. Primary metric: no-show rate. Guardrails: waitlist fill rate, patient complaints.</td></tr>
+          <tr><td><b>2. Pilot SMS on the 1 to 2 day band.</b> It is the one band never messaged: 11,938 appointments at 22.7%.</td><td>Where SMS was sent, recipients no-showed 2.8 to 7.3 points less within each lead band.</td><td>Randomised 50/50 holdout, because the existing SMS effect is observational. Agree the minimum effect worth the message cost before starting.</td></tr>
+          <tr><td><b>3. Offer a flexible slot to the highest-risk group.</b> Booked 15+ days ahead and aged 13 to 39: a reschedule link plus a nearer slot.</td><td>9,642 appointments (8.7% of volume) at <strong>38.8%</strong>, nearly double the 20.2% average. A subgroup found by exploring the data, so validate it on a later period before acting.</td><td>Track reschedule take-up and the no-show rate of the rescheduled slots.</td></tr>
+          <tr><td><b>4. Do not build weekday rules.</b></td><td>Monday to Friday range is 19.3 to 21.2%: real but too small to act on.</td><td>None needed; revisit only if volumes change.</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <div class="stage-row rv">
-    <div class="lab mono"><div>04 Outcome<small>Weeks 1&ndash;6 vs weeks 7&ndash;12</small></div></div>
+    <div class="lab mono"><div>04 Outcome<small>What is measured, and what is a scenario</small></div></div>
     <div class="body">
-      <p class="mono acc" style="margin:0 0 8px;font-size:11px">Synthetic outcome, effect built into the generator</p>
-      <div class="out syn" id="out1"></div>
-      <p class="note">Synthetic data: the treatment effect was written into the generator, so this shows how I would measure a change like this, not that it would happen. Generator and seed are in the repository (<span class="mono" style="text-transform:none">tools/gen_data.py</span>).</p>
+      <p class="mono acc" style="margin:0 0 8px;font-size:12px">Measured in the dataset</p>
+      <div class="out real">
+        <div><b>7<small>&times;</small></b><span>No-show rate of 31+ day bookings (33.0%) versus same-day (4.6%)</span></div>
+        <div><b>57<small>%</small></b><span>of all no-shows come from the 36% of bookings made 8+ days ahead</span></div>
+        <div><b>2.8&ndash;7.3<small> pts</small></b><span>Lower no-show rate for SMS recipients within every lead-time band (observational)</span></div>
+      </div>
+      <p class="mono acc" style="margin:26px 0 8px;font-size:12px">Scenario, an assumption to be tested</p>
+      <div class="out syn one">
+        <div><b>20.2% &rarr; 17.9%</b><span>Overall no-show rate if reconfirmation recovers 20% of the 12,750 long-lead no-shows (about 2,550 slots saved per 110,000 bookings, if the waitlist fills them)</span></div>
+      </div>
+      <p class="note">The 20% recovery rate is my assumption, not a finding; recommendation 1 is the experiment that would replace it with a measured number. The data has no cancellation field, so bookings cancelled early are absent and the lead-time curve is partly a selection effect; same-day bookings are low partly because the patient is already there. These data are from 2016 and one health system, so re-check the patterns on the clinic's own bookings before acting.</p>
     </div>
   </div>
 </article>
@@ -277,8 +302,8 @@
     <table class="tk rv">
       <thead><tr><th scope="col">Tool</th><th scope="col">Where you can see it used</th></tr></thead>
       <tbody>
-        <tr><th scope="row">SQL</th><td>Weekly clinic KPIs with joins and conditional aggregates, funnel and cohort retention queries; the Case 01 query rewrites itself as you filter. Credential: IBM Data Fundamentals (2025).<br><a href="#case-1">Case 01</a><a href="#case-2">Case 02</a></td></tr>
-        <tr><th scope="row">Power BI</th><td>Dashboard thinking (KPI definitions, filters, annotation) applied in Case 01, which is hand-built in SVG on this page, not a Power BI file. Credential: LinkedIn Learning, <em>Getting Started with Power BI</em> (2025).<br><a href="#case-1">Case 01</a></td></tr>
+        <tr><th scope="row">SQL</th><td>SQLite on 110,521 real appointments (CASE bands, conditional aggregates, a confounder check) with a query that rewrites itself as you filter; funnel and cohort queries in Case 02. Credential: IBM Data Fundamentals (2025).<br><a href="#case-1">Case 01</a><a href="#case-2">Case 02</a></td></tr>
+        <tr><th scope="row">Power BI</th><td>Dashboard thinking (KPI definitions, filters, annotation) applied in Case 01, hand-built in SVG on this page, not a Power BI file. Credential: LinkedIn Learning, <em>Getting Started with Power BI</em> (2025).<br><a href="#case-1">Case 01</a></td></tr>
         <tr><th scope="row">Excel &amp; Sheets</th><td><strong>25% less manual reporting</strong> from the imcure MIS (policy and sales data flows, KPI tracking); <strong>20% less documentation time</strong> with Excel tracking at Cogniable.<br><a href="#timeline">Timeline</a></td></tr>
         <tr><th scope="row">Requirements &amp; BRD</th><td>As-is to to-be KYC redesign (<strong>30% less manual verification time</strong>), BRD excerpt and five user stories with acceptance criteria in Case 03; 4+ cross-team deliverables at imcure.<br><a href="#case-3">Case 03</a></td></tr>
         <tr><th scope="row">Python &amp; R</th><td>PGDM coursework and projects; less than one year of experience.</td></tr>
@@ -304,7 +329,7 @@
 
 <footer>
   <div class="wrap">
-    <p>All case-study data on this page is synthetic or anonymised; no real patient, customer or company data is shown. Resume facts (employers, dates, percentages) are as stated on my resume.</p>
+    <p>Case 01 uses a real public dataset (Joni Hoppen and Aquarela Analytics, <a href="https://www.kaggle.com/datasets/joniarroba/noshowappointments">Kaggle</a>, CC BY-NC-SA 4.0; aggregated, no patient-level data shown); Case 02 data is synthetic and Case 03 is anonymised. Resume facts (employers, dates, percentages) are as stated on my resume.</p>
     <p class="mono">&copy; Rajul Raman</p>
   </div>
 </footer>

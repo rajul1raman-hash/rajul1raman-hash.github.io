@@ -6,7 +6,7 @@ var NS="http://www.w3.org/2000/svg";
 var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
 var lerp=function(a,b,t){return a+(b-a)*t};
 var sstep=function(a,b,x){var t=clamp((x-a)/(b-a),0,1);return t*t*(3-2*t)};
-var fmt=function(n,d){return n.toLocaleString("en-IN",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})};
+var fmt=function(n,d){return n.toLocaleString("en-US",{minimumFractionDigits:d||0,maximumFractionDigits:d||0})};
 function h(tag,attrs,html){var e=document.createElement(tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(html!=null)e.innerHTML=html;return e}
 
 /* ---------- theme ---------- */
@@ -25,18 +25,6 @@ function h(tag,attrs,html){var e=document.createElement(tag);for(var k in attrs)
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});
   els.forEach(function(e){io.observe(e)});
 })();
-
-/* ---------- data ---------- */
-var D=null,TH_NAMES=["A","B","C","D"],CAP=2800;
-function weekAgg(f){
-  var o={booked:[],ns:[],del:[],rev:[],cap:[]};
-  for(var w=0;w<12;w++){o.booked.push(0);o.ns.push(0);o.del.push(0);o.rev.push(0);o.cap.push((f.th==="all"?4:1)*CAP)}
-  D.rows.forEach(function(r){
-    if(f.th!=="all"&&r[1]!==f.th)return;if(f.vt!=="all"&&r[2]!==f.vt)return;if(f.ld!=="all"&&r[3]!==f.ld)return;
-    var i=r[0]-1;o.booked[i]+=r[4];o.ns[i]+=r[5];o.del[i]+=r[6];o.rev[i]+=r[8]});
-  return o}
-function sum(a,lo,hi){var s=0;for(var i=lo==null?0:lo;i<(hi==null?a.length:hi);i++)s+=a[i];return s}
-function seg(vt,ld,lo,hi){var b=0,n=0;D.rows.forEach(function(r){if(r[2]===vt&&r[3]===ld&&r[0]>=lo&&r[0]<=hi){b+=r[4];n+=r[5]}});return 100*n/b}
 
 /* ---------- SQL panel ---------- */
 var KW=/\b(SELECT|FROM|WHERE|AND|JOIN|LEFT|ON|GROUP|BY|ORDER|AS|WITH|COUNT|SUM|ROUND|FILTER|DISTINCT|OVER|LAG|DATE_TRUNC|DATE_PART|AGE|MIN|CASE|WHEN|THEN|END|USING|NULLIF|ASC)\b/g;
@@ -59,79 +47,83 @@ function sqlPanel(box,opt){
   renderSql();
   return{update:function(){renderSql();if(open)renderRes(false)}}}
 
-/* ---------- Case 01 dashboard ---------- */
-var F={th:"all",vt:"all",ld:"all"},METRIC="noshow",shown=null,target=null,raf=0,c1;
-var METRICS={
-  noshow:{label:"No-show %",tab:"No-show",val:function(o,i){return o.booked[i]?100*o.ns[i]/o.booked[i]:0},f:function(v){return v.toFixed(1)+"%"},min:10},
-  cap:{label:"Capacity used %",tab:"Capacity",val:function(o,i){return 100*o.del[i]/o.cap[i]},f:function(v){return v.toFixed(0)+"%"},min:20},
-  rev:{label:"Revenue (INR k)",tab:"Revenue",val:function(o,i){return o.rev[i]/1000},f:function(v){return"₹"+v.toFixed(0)+"k"},min:20},
-  booked:{label:"Booked",tab:"Booked",val:function(o,i){return o.booked[i]},f:function(v){return v.toFixed(0)},min:10}};
-function niceMax(v,min){var s=[1,2,2.5,5,10],e=Math.pow(10,Math.floor(Math.log10(Math.max(v,min))));for(var i=0;i<s.length;i++)if(s[i]*e>=Math.max(v,min)*1.04)return s[i]*e;return 10*e}
-function seg1(name,opts,key,init){
-  var box=$("#"+name);
-  box.setAttribute("role","radiogroup");
-  box.innerHTML=opts.map(function(o,i){var chk=(String(o[0])===String(init));return'<label><input type="radio" name="'+name+'" value="'+o[0]+'"'+(chk?" checked":"")+'><span>'+o[1]+"</span></label>"}).join("");
+/* ---------- Case 01: real public dataset, aggregated cube ---------- */
+var D=null;
+var AGES=["0-12","13-24","25-39","40-54","55-69","70+"],LEADS=["Same day","1-2 d","3-7 d","8-14 d","15-30 d","31+ d"],DAYS=["Mon","Tue","Wed","Thu","Fri","Sat"],SMSL=["No SMS","SMS sent"];
+var DIMS={
+  lead:{i:1,labels:LEADS,name:"Booked ahead",tab:"Booked ahead",alias:"lead_band",
+    expr:"CASE WHEN lead_days = 0 THEN 'Same day'\n            WHEN lead_days <= 2 THEN '1-2 d'\n            WHEN lead_days <= 7 THEN '3-7 d'\n            WHEN lead_days <= 14 THEN '8-14 d'\n            WHEN lead_days <= 30 THEN '15-30 d'\n            ELSE '31+ d' END",
+    where:["lead_days = 0","lead_days BETWEEN 1 AND 2","lead_days BETWEEN 3 AND 7","lead_days BETWEEN 8 AND 14","lead_days BETWEEN 15 AND 30","lead_days >= 31"],order:"MIN(lead_days)"},
+  age:{i:0,labels:AGES,name:"Age band",tab:"Age",alias:"age_band",
+    expr:"CASE WHEN age <= 12 THEN '0-12'\n            WHEN age <= 24 THEN '13-24'\n            WHEN age <= 39 THEN '25-39'\n            WHEN age <= 54 THEN '40-54'\n            WHEN age <= 69 THEN '55-69'\n            ELSE '70+' END",
+    where:["age BETWEEN 0 AND 12","age BETWEEN 13 AND 24","age BETWEEN 25 AND 39","age BETWEEN 40 AND 54","age BETWEEN 55 AND 69","age >= 70"],order:"MIN(age)"},
+  sms:{i:2,labels:SMSL,name:"SMS reminder",tab:"SMS",alias:"sms_sent",expr:"sms_received",where:["sms_received = 0","sms_received = 1"],order:"1"},
+  dow:{i:3,labels:DAYS,name:"Weekday",tab:"Weekday",alias:"weekday",
+    expr:"CASE dow WHEN 1 THEN 'Mon' WHEN 2 THEN 'Tue' WHEN 3 THEN 'Wed'\n                 WHEN 4 THEN 'Thu' WHEN 5 THEN 'Fri' ELSE 'Sat' END",where:null,order:"MIN(dow)"}};
+var ORDER=["lead","age","sms","dow"],F={age:"all",lead:"all",sms:"all"},BREAK="lead",shown=null,raf=0,sql1=null;
+function cells(skip){return D.cube.filter(function(r){return(skip==="age"||F.age==="all"||r[0]===F.age)&&(skip==="lead"||F.lead==="all"||r[1]===F.lead)&&(skip==="sms"||F.sms==="all"||r[2]===F.sms)})}
+function group(dim){var d=DIMS[dim],n=d.labels.map(function(){return 0}),ns=n.slice();cells(dim).forEach(function(r){n[r[d.i]]+=r[4];ns[r[d.i]]+=r[5]});return{n:n,ns:ns}}
+function totals(){var n=0,ns=0;cells().forEach(function(r){n+=r[4];ns+=r[5]});return{n:n,ns:ns}}
+var ALLN=0,ALLNS=0;
+function niceMax(v){var s=[10,20,25,30,35,40,50,60,80,100];for(var i=0;i<s.length;i++)if(s[i]>=v*1.12)return s[i];return 100}
+function seg1(id,labels,key,all){
+  var box=$("#"+id);box.setAttribute("role","radiogroup");
+  box.innerHTML='<label><input type="radio" name="'+id+'" value="all" checked><span>'+all+"</span></label>"+labels.map(function(l,i){return'<label><input type="radio" name="'+id+'" value="'+i+'"><span>'+l+"</span></label>"}).join("");
   box.addEventListener("change",function(e){var v=e.target.value;F[key]=v==="all"?"all":+v;refresh()})}
-function kpis(o){
-  var bk=sum(o.booked)/12,ns=100*sum(o.ns)/(sum(o.booked)||1),cap=100*sum(o.del)/sum(o.cap),rev=sum(o.rev)/12/1000;
-  $("#kpis").innerHTML=[[fmt(bk),"Booked per week"],[ns.toFixed(1)+"%","No-show rate"],[cap.toFixed(0)+"%","Capacity used"],["₹"+fmt(rev)+"k","Revenue per week, 12-wk avg"]].map(function(k){return'<div class="kpi"><b>'+k[0]+'</b><span class="mono">'+k[1]+"</span></div>"}).join("")}
-function filterText(){
-  var p=[];p.push(F.th==="all"?"all therapists":"therapist "+TH_NAMES[F.th]);p.push(F.vt==="all"?"all visits":F.vt===0?"first visits":"follow-ups");p.push(F.ld==="all"?"any lead time":F.ld===0?"booked 5 days or fewer ahead":"booked more than 5 days ahead");return p.join(" / ")}
-function drawChart(vals,o){
-  var box=$("#chart1"),W=Math.max(300,box.clientWidth),Ht=Math.round(clamp(W*.42,230,380)),pl=W<520?38:52,pr=12,pt=22,pb=30,M=METRICS[METRIC];
-  var mx=niceMax(Math.max.apply(null,vals),M.min),pw=W-pl-pr,ph=Ht-pt-pb;
-  var X=function(i){return pl+i/11*pw},Y=function(v){return pt+(1-v/mx)*ph};
-  var s='<svg viewBox="0 0 '+W+" "+Ht+'" role="img" aria-label="'+M.label+" by week, W1 to W12, for "+filterText()+'. The data table below the chart (Run query) has the exact values.">';
-  for(var t=0;t<=4;t++){var tv=mx*t/4,y=Y(tv);s+='<line class="ax" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'"/><text x="'+(pl-8)+'" y="'+(y+4)+'" text-anchor="end">'+(METRIC==="rev"?fmt(tv):mx<=10?tv.toFixed(1):fmt(tv))+"</text>"}
-  for(var i=0;i<12;i++)if(W>=520||i%2===0)s+='<text x="'+X(i)+'" y="'+(Ht-8)+'" text-anchor="middle">W'+(i+1)+"</text>";
-  var iv=pl+(6/11)*pw-pw/22;
-  s+='<line x1="'+iv+'" x2="'+iv+'" y1="'+pt+'" y2="'+(pt+ph)+'" stroke="var(--acc)" stroke-dasharray="4 4"/><g class="tx"><text x="'+(iv+6)+'" y="'+(pt+10)+'">'+(W<520?"Rule from W7":"Reminder + overbooking from W7")+'</text></g>';
-  var d="";vals.forEach(function(v,i){d+=(i?"L":"M")+X(i).toFixed(1)+" "+Y(v).toFixed(1)});
-  s+='<path class="ln" d="'+d+'"/>';
-  vals.forEach(function(v,i){s+='<circle class="pt'+(i>=6?" on":"")+'" cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="4"/>'});
-  for(i=0;i<12;i++)s+='<rect class="hit" data-i="'+i+'" x="'+(X(i)-pw/22)+'" y="'+pt+'" width="'+(pw/11)+'" height="'+ph+'"/>';
-  s+="</svg>";
+function kpis(){
+  var t=totals();
+  $("#kpis").innerHTML=[[fmt(t.n),"Appointments"],[t.n?(100*t.ns/t.n).toFixed(1)+"%":"n/a","No-show rate"],[fmt(t.ns),"No-shows"],[(100*t.ns/ALLNS).toFixed(0)+"%","Of all no-shows"]].map(function(k){return'<div class="kpi"><b>'+k[0]+'</b><span class="mono">'+k[1]+"</span></div>"}).join("")}
+function filterText(){var p=[];p.push(F.age==="all"?"all ages":"age "+AGES[F.age]);p.push(F.lead==="all"?"any lead time":"booked "+LEADS[F.lead]+" ahead");p.push(F.sms==="all"?"SMS sent or not":SMSL[F.sms].toLowerCase());return p.join(" / ")}
+function drawChart(rates,g){
+  var d=DIMS[BREAK],box=$("#chart1"),W=Math.max(300,box.clientWidth),Ht=Math.round(clamp(W*.5,260,400)),pl=W<520?34:46,pr=8,pt=30,pb=48,k=rates.length,sm=W<520;
+  var mx=niceMax(Math.max.apply(null,rates.concat([ALLNS/ALLN*100]))),pw=W-pl-pr,ph=Ht-pt-pb,bw=pw/k,Y=function(v){return pt+(1-v/mx)*ph},avg=100*ALLNS/ALLN;
+  var s='<svg viewBox="0 0 '+W+" "+Ht+'" role="img" aria-label="No-show rate by '+d.name.toLowerCase()+" for "+filterText()+'. The query result table below has the exact values.">';
+  for(var t=0;t<=4;t++){var tv=mx*t/4,y=Y(tv);s+='<line class="ax" x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'"/><text x="'+(pl-6)+'" y="'+(y+4)+'" text-anchor="end">'+Math.round(tv)+"%</text>"}
+  var maxI=rates.indexOf(Math.max.apply(null,rates.filter(function(v,i){return g.n[i]>=300})));
+  rates.forEach(function(v,i){
+    var x=pl+i*bw+bw*.14,w=bw*.72,small=g.n[i]<300,sel=(F[BREAK]!==undefined&&F[BREAK]!=="all"&&F[BREAK]===i),y=Y(v);
+    s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+Math.max(0,pt+ph-y).toFixed(1)+'" fill="'+(i===maxI?"var(--acc)":"var(--ink)")+'" opacity="'+(small?.3:1)+'"/>';
+    if(sel)s+='<rect x="'+(x-3).toFixed(1)+'" y="'+(y-3).toFixed(1)+'" width="'+(w+6).toFixed(1)+'" height="'+(pt+ph-y+6).toFixed(1)+'" fill="none" stroke="var(--ink)" stroke-width="2" stroke-dasharray="4 3"/>';
+    s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(y-6).toFixed(1)+'" text-anchor="middle" style="fill:var(--ink);font-weight:500">'+(g.n[i]?v.toFixed(1)+"%":"")+"</text>";
+    s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(Ht-28)+'" text-anchor="middle" style="fill:var(--ink)">'+(sm?d.labels[i].replace(" d","").replace("Same day","Same"):d.labels[i])+'</text><text x="'+(x+w/2).toFixed(1)+'" y="'+(Ht-12)+'" text-anchor="middle">'+(sm?"":"n=")+(g.n[i]>=10000?(g.n[i]/1000).toFixed(1)+"k":fmt(g.n[i]))+"</text>";
+    s+='<rect class="hit" data-i="'+i+'" x="'+(pl+i*bw).toFixed(1)+'" y="'+pt+'" width="'+bw.toFixed(1)+'" height="'+ph+'"/>'});
+  var ay=Y(avg);s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+ay+'" y2="'+ay+'" stroke="var(--acc)" stroke-dasharray="5 4" stroke-width="1.5"/><text x="'+pl+'" y="14" style="fill:var(--acc)">- - all appointments '+avg.toFixed(1)+"%</text></svg>";
   box.innerHTML=s+'<div class="tip" role="presentation"></div>';
   var tip=$(".tip",box);
-  function show(e){var r=e.target;if(!r.dataset||r.dataset.i==null)return;var i=+r.dataset.i,br=box.getBoundingClientRect();
-    tip.innerHTML="W"+(i+1)+" &middot; "+M.label+" "+M.f(vals[i])+"<br>"+fmt(o.booked[i])+" booked";
-    tip.style.left=clamp(X(i),70,W-70)+"px";tip.style.top=Y(vals[i])+"px";tip.classList.add("on")}
-  box.addEventListener("pointermove",show);box.addEventListener("pointerdown",show);box.addEventListener("pointerleave",function(){tip.classList.remove("on")})}
+  function show(e){var r=e.target;if(!r.dataset||r.dataset.i==null)return;var i=+r.dataset.i;
+    tip.innerHTML=d.labels[i]+" &middot; "+(g.n[i]?rates[i].toFixed(1)+"% no-show":"no data")+"<br>"+fmt(g.ns[i])+" of "+fmt(g.n[i])+" appointments";
+    tip.style.left=clamp(pl+i*bw+bw/2,80,W-80)+"px";tip.style.top=Y(rates[i])+"px";tip.classList.add("on")}
+  box.onpointermove=show;box.onpointerdown=show;box.onpointerleave=function(){tip.classList.remove("on")}}
 function refresh(){
-  var o=weekAgg(F),M=METRICS[METRIC],t=[];for(var i=0;i<12;i++)t.push(M.val(o,i));
-  kpis(o);[].forEach.call(document.querySelectorAll("#seglist li"),function(li){li.classList.toggle("sel",(F.vt==="all"||+li.dataset.vt===F.vt)&&(F.ld==="all"||+li.dataset.ld===F.ld)&&!(F.vt==="all"&&F.ld==="all"))});$("#chart1-note").textContent="Showing "+M.label+" for "+filterText()+". Synthetic data.";
+  var g=group(BREAK),rates=g.n.map(function(n,i){return n?100*g.ns[i]/n:0});
+  kpis();$("#chart1-note").textContent="No-show rate by "+DIMS[BREAK].name.toLowerCase()+" for "+filterText()+(BREAK!=="dow"?". Dashed outline marks your filter selection.":". Saturday has only 39 appointments (faded).");
   if(sql1)sql1.update();
-  target=t;var from=shown&&shown.length===12&&shown.metric===METRIC?shown.slice():t.slice();shown=from;shown.metric=METRIC;
-  cancelAnimationFrame(raf);var t0=performance.now(),dur=RM?0:380;
-  (function step(now){var k=dur?clamp((now-t0)/dur,0,1):1,e=1-Math.pow(1-k,3),v=from.map(function(a,i){return lerp(a,t[i],e)});shown=v;shown.metric=METRIC;drawChart(v,o);if(k<1)raf=requestAnimationFrame(step)})(t0)}
-var sql1=null;
+  var from=shown&&shown.length===rates.length&&shown.brk===BREAK?shown.slice():rates.slice();
+  cancelAnimationFrame(raf);var t0=performance.now(),dur=RM?0:350;
+  (function step(now){var k=dur?clamp((now-t0)/dur,0,1):1,e=1-Math.pow(1-k,3),v=from.map(function(a,i){return lerp(a,rates[i],e)});shown=v;shown.brk=BREAK;drawChart(v,g);if(k<1)raf=requestAnimationFrame(step)})(t0)}
+function filtersSql(skip){var w=[];["age","lead","sms"].forEach(function(k){if(k!==skip&&F[k]!=="all")w.push("  AND "+DIMS[k].where[F[k]])});return w}
 function sql1Text(){
-  var w=["  a.slot_start >= DATE '2026-01-05'","  AND a.slot_start <  DATE '2026-03-30'"];
-  if(F.th!=="all")w.push("  AND t.code = '"+TH_NAMES[F.th]+"'");
-  if(F.vt!=="all")w.push("  AND a.visit_type = '"+(F.vt===0?"first":"follow_up")+"'");
-  if(F.ld!=="all")w.push("  AND a.lead_days "+(F.ld===0?"<= 5":"> 5"));
-  return "-- weekly clinic KPIs, synthetic dataset\nWITH cap AS (\n  SELECT DATE_TRUNC('week', week_start)::date AS wk,\n         SUM(weekly_minutes) AS minutes\n  FROM   therapist_weeks"+(F.th!=="all"?"\n  WHERE  code = '"+TH_NAMES[F.th]+"'":"")+"\n  GROUP  BY 1)\nSELECT DATE_TRUNC('week', a.slot_start)::date AS wk,\n       COUNT(*)                                AS booked,\n       ROUND(100.0 * COUNT(*) FILTER (WHERE a.status = 'no_show')\n                   / COUNT(*), 1)              AS no_show_pct,\n       ROUND(100.0 * SUM(a.minutes_delivered)\n                   / MAX(c.minutes), 1)        AS capacity_pct,\n       SUM(i.amount)                           AS revenue_inr\nFROM   appointments a\nJOIN   therapists t   ON t.id = a.therapist_id\nJOIN   cap c          ON c.wk = DATE_TRUNC('week', a.slot_start)::date\nLEFT JOIN invoices i  ON i.appointment_id = a.id\nWHERE\n"+w.join("\n")+"\nGROUP  BY 1\nORDER  BY 1;"}
+  var d=DIMS[BREAK],w=filtersSql(BREAK);
+  return "-- no-show rate by "+d.name.toLowerCase()+"; SQLite; real public dataset\nWITH base AS (\n  SELECT no_show, sms_received, age,\n         CAST(julianday(appointment_date)\n            - julianday(substr(scheduled_at, 1, 10)) AS INT) AS lead_days,\n         CAST(strftime('%w', appointment_date) AS INT)       AS dow\n  FROM   appointments\n  WHERE  age >= 0                                   -- 1 impossible age dropped\n    AND  appointment_date >= substr(scheduled_at, 1, 10))  -- 5 booked after visit dropped\nSELECT "+d.expr+"\n         AS "+d.alias+",\n       COUNT(*)                       AS appointments,\n       SUM(no_show)                   AS no_shows,\n       ROUND(100.0 * AVG(no_show), 1) AS no_show_pct\nFROM   base\nWHERE  1 = 1"+(w.length?"\n"+w.join("\n"):"")+"\nGROUP  BY 1\nORDER  BY "+d.order+";"}
 function sql1Run(){
-  var o=weekAgg(F),rows=[];for(var i=0;i<12;i++){var d=new Date(Date.UTC(2026,0,5+7*i));
-    rows.push([d.toISOString().slice(0,10),o.booked[i],o.booked[i]?(100*o.ns[i]/o.booked[i]).toFixed(1):"0.0",(100*o.del[i]/o.cap[i]).toFixed(1),fmt(o.rev[i])])}
-  return{cols:["wk","booked","no_show_pct","capacity_pct","revenue_inr"],rows:rows}}
-
+  var d=DIMS[BREAK],g=group(BREAK),rows=[];
+  g.n.forEach(function(n,i){if(n)rows.push([d.labels[i],fmt(n),fmt(g.ns[i]),(100*g.ns[i]/n).toFixed(1)])});
+  return{cols:[d.alias,"appointments","no_shows","no_show_pct"],rows:rows}}
+function pairs(){
+  var rows=[["3-7 d",2],["8-14 d",3],["15-30 d",4],["31+ d",5]],h2="";
+  function rate(l,s){var n=0,ns=0;D.cube.forEach(function(r){if(r[1]===l&&r[2]===s){n+=r[4];ns+=r[5]}});return 100*ns/n}
+  var c0=0,c1=0,n0=0,n1=0;D.cube.forEach(function(r){if(r[2]===0){n0+=r[4];c0+=r[5]}else{n1+=r[4];c1+=r[5]}});
+  h2+='<div class="pr crude"><span class="pl mono">All bookings (crude)</span><span class="pb"><i style="width:'+(100*c0/n0/40*100)+'%" class="b0"></i><em>'+(100*c0/n0).toFixed(1)+'% no SMS</em></span><span class="pb"><i style="width:'+(100*c1/n1/40*100)+'%" class="b1"></i><em>'+(100*c1/n1).toFixed(1)+'% SMS</em></span><span class="pd mono">looks backwards</span></div>';
+  rows.forEach(function(r){var a=rate(r[1],0),b=rate(r[1],1);h2+='<div class="pr"><span class="pl mono">Booked '+r[0]+' ahead</span><span class="pb"><i style="width:'+(a/40*100)+'%" class="b0"></i><em>'+a.toFixed(1)+'% no SMS</em></span><span class="pb"><i style="width:'+(b/40*100)+'%" class="b1"></i><em>'+b.toFixed(1)+'% SMS</em></span><span class="pd mono">'+(Math.round(b*10)/10-Math.round(a*10)/10).toFixed(1).replace("-","−")+" pts</span></div>"});
+  $("#smspairs").innerHTML=h2}
 function initCase1(){
-  seg1("f-th",[["all","All"],[0,"A"],[1,"B"],[2,"C"],[3,"D"]],"th","all");
-  seg1("f-vt",[["all","All"],[0,"First visit"],[1,"Follow-up"]],"vt","all");
-  seg1("f-ld",[["all","Any"],[0,"≤5 days"],[1,">5 days"]],"ld","all");
-  $("#metrics").innerHTML=Object.keys(METRICS).map(function(k){return'<button type="button" data-m="'+k+'" aria-pressed="'+(k===METRIC)+'" aria-label="'+METRICS[k].label+'">'+METRICS[k].tab+"</button>"}).join("");
-  $("#metrics").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;METRIC=b.dataset.m;[].forEach.call($("#metrics").children,function(x){x.setAttribute("aria-pressed",x===b)});refresh()});
-  sql1=sqlPanel($("#sql1"),{id:"q1",title:"appointments.sql",sql:sql1Text,run:sql1Run});
-  refresh();
-  var segs=[["First visit, >5 days ahead",0,1],["First visit, ≤5 days",0,0],["Follow-up, >5 days ahead",1,1],["Follow-up, ≤5 days",1,0]],vals=segs.map(function(s){return seg(s[1],s[2],1,6)}),mx=Math.max.apply(null,vals);
-  $("#seglist").innerHTML=segs.map(function(s,i){return'<li data-vt="'+s[1]+'" data-ld="'+s[2]+'" class="'+(i===0?"hot":"")+'"><span>'+s[0]+'</span><span class="trk"><i data-w="'+(vals[i]/mx*100).toFixed(1)+'"></i></span><b>'+vals[i].toFixed(1)+"%</b></li>"}).join("");
-  var rest=vals.slice(1).sort(function(a,b){return a-b});
-  $("#d-hot").textContent=vals[0].toFixed(1)+"%";$("#d-rest").textContent=rest[0].toFixed(1)+"–"+rest[2].toFixed(1)+"%";
-  onView($("#seglist"),function(){[].forEach.call(document.querySelectorAll("#seglist i"),function(i){i.style.width=i.dataset.w+"%"})});
-  var a=weekAgg({th:"all",vt:"all",ld:"all"}),nsA=100*sum(a.ns,0,6)/sum(a.booked,0,6),nsB=100*sum(a.ns,6,12)/sum(a.booked,6,12),cA=100*sum(a.del,0,6)/sum(a.cap,0,6),cB=100*sum(a.del,6,12)/sum(a.cap,6,12),rA=sum(a.rev,0,6)/6/1000,rB=sum(a.rev,6,12)/6/1000;
-  $("#out1").innerHTML=[[nsA,nsB,"No-show rate, all visits","%",1],[cA,cB,"Therapist capacity used","%",0],[rA,rB,"Average weekly revenue, weeks 7–12 (INR k, +"+(100*(rB/rA-1)).toFixed(0)+"%)","k",0]].map(function(x){return"<div><b>"+(x[3]==="k"?"₹":"")+x[1].toFixed(x[4])+"<small>"+x[3]+'</small></b><span class="from">from '+(x[3]==="k"?"₹":"")+x[0].toFixed(x[4])+x[3]+" in weeks 1–6</span><span>"+x[2]+"</span></div>"}).join("");
-  var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){drawChart(shown,weekAgg(F))},120)})}
+  D.cube.forEach(function(r){ALLN+=r[4];ALLNS+=r[5]});
+  seg1("f-age",AGES,"age","All");seg1("f-lead",LEADS,"lead","All");seg1("f-sms",SMSL,"sms","Any");
+  $("#metrics").innerHTML=ORDER.map(function(k){return'<button type="button" data-m="'+k+'" aria-pressed="'+(k===BREAK)+'">'+DIMS[k].tab+"</button>"}).join("");
+  $("#metrics").addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;BREAK=b.dataset.m;[].forEach.call($("#metrics").children,function(x){x.setAttribute("aria-pressed",x===b)});refresh()});
+  sql1=sqlPanel($("#sql1"),{id:"q1",title:"no_shows.sql",sql:sql1Text,run:sql1Run});
+  pairs();refresh();
+  var rt;window.addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(function(){var g=group(BREAK);drawChart(shown,g)},120)})}
 
 function onView(el,fn,thr){
   if(!("IntersectionObserver" in window)||RM){fn();return}
@@ -228,7 +220,7 @@ function onView(el,fn,thr){
 })();
 
 /* ---------- HERO morph ---------- */
-var weeklyRev=[169.3,178.4,164.8,170.7,169.3,176.7,190.9,190.6,201.1,217.2,197.6,197.6];
+var weeklyRev=[4.6,21.4,23.8,23.5,24.6,26.7,29.1,31.6,32.2,33.0,33.0],curveLabels=["0","1","2","3","4-6","7","8-10","11-14","15-21","22-30","31+"],curveAvg=20.2;
 function initHero(){
   var hero=$("#top"),stage=$(".stage",hero),wrap=$("#ecgwrap"),svg=$("#ecg"),N=600,W,H,xE=[],xC=[],yE=[],yC=[],g={},p=0,intro=RM?1:0,t0=performance.now(),running=false;
   function ecgShape(u){
@@ -237,23 +229,25 @@ function initHero(){
   function layout(){
     W=wrap.clientWidth;H=wrap.clientHeight;
     var small=W<600,pl=small?40:60,pr=small?14:32,top=Math.min(small?92:92,H*.42),bot=small?24:30,ph=H-top-bot,base=top+ph*.6,A=ph*.5,nb=small?3:5;
-    var vmin=150,vmax=230;
+    var vmin=0,vmax=40,K=weeklyRev.length-1;
     var ys=weeklyRev.map(function(v){return top+(1-(v-vmin)/(vmax-vmin))*ph});
     xE=[];xC=[];yE=[];yC=[];
     for(var i=0;i<N;i++){
       var f=i/(N-1);xE.push(f*W);xC.push(pl+f*(W-pl-pr));
       var u=(f*nb+.25)%1;yE.push(base+A*ecgShape(u)*(f<.02?f/.02:1));
-      var s=f*11,k=Math.min(10,Math.floor(s)),tt=s-k,p0=ys[Math.max(0,k-1)],p1=ys[k],p2=ys[k+1],p3=ys[Math.min(11,k+2)];
-      yC.push(.5*((2*p1)+(-p0+p2)*tt+(2*p0-5*p1+4*p2-p3)*tt*tt+(-p0+3*p1-3*p2+p3)*tt*tt*tt))}
+      var s=f*K,k=Math.min(K-1,Math.floor(s)),tt=s-k,p1=ys[k],p2=ys[k+1];
+      yC.push(p1+(p2-p1)*tt)}
     var s='<g id="gE">',x,y;
     for(x=0;x<=W;x+=small?12:15)s+='<line x1="'+x+'" x2="'+x+'" y1="0" y2="'+H+'" stroke="var(--grid)" stroke-width="'+(x%(small?60:75)===0?1:.5)+'"/>';
     for(y=0;y<=H;y+=small?12:15)s+='<line x1="0" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="var(--grid)" stroke-width="'+(y%(small?60:75)===0?1:.5)+'"/>';
     s+='</g><g id="gC" opacity="0">';
-    [160,180,200,220].forEach(function(v){var yy=top+(1-(v-vmin)/(vmax-vmin))*ph;s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--rule2)" stroke-width="1"/><text x="'+(pl-8)+'" y="'+(yy+4)+'" text-anchor="end">'+v+"</text>"});
-    for(var w=0;w<12;w++)if(!small||w%2===0)s+='<text x="'+(pl+w/11*(W-pl-pr))+'" y="'+(H-8)+'" text-anchor="middle">W'+(w+1)+"</text>";
-    var ivx=pl+6/11*(W-pl-pr);
-    s+='<line x1="'+ivx+'" x2="'+ivx+'" y1="'+top+'" y2="'+(top+ph)+'" stroke="var(--acc)" stroke-dasharray="4 4"/><text x="'+(ivx+6)+'" y="'+(top+12)+'" style="fill:var(--acc)">'+(small?"W7 rule":"W7: reminder + overbooking rule")+'</text>';
-    if(!small)s+='<text id="lE" text-anchor="end" x="'+(W-pr)+'" y="'+(ys[11]+24)+'" style="fill:var(--ink);font-weight:500">W12 ₹'+Math.round(weeklyRev[11])+"k (synthetic)</text>";
+    [10,20,30,40].forEach(function(v){var yy=top+(1-(v-vmin)/(vmax-vmin))*ph;s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy+'" y2="'+yy+'" stroke="var(--rule2)" stroke-width="1"/><text x="'+(pl-8)+'" y="'+(yy+4)+'" text-anchor="end">'+v+"%</text>"});
+    for(var w=0;w<=K;w++)if(!small||w%2===0)s+='<text x="'+(pl+w/K*(W-pl-pr))+'" y="'+(H-8)+'" text-anchor="middle">'+curveLabels[w]+(w===11?"":"")+"</text>";
+    var ay=top+(1-curveAvg/(vmax-vmin))*ph;
+    s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+ay+'" y2="'+ay+'" stroke="var(--acc)" stroke-dasharray="4 4"/><text x="'+(W-pr)+'" y="'+(ay-6)+'" text-anchor="end" style="fill:var(--acc)">all appointments '+curveAvg.toFixed(1)+'%</text>';
+    s+='<text id="lE" text-anchor="end" x="'+(W-pr)+'" y="'+(ys[K]+24)+'" style="fill:var(--ink);font-weight:500">31+ days: '+weeklyRev[K].toFixed(1)+'%</text>';
+    if(!small)s+='<text id="lS" x="'+(pl+18)+'" y="'+(ys[0]+20)+'" style="fill:var(--ink);font-weight:500">same day: '+weeklyRev[0].toFixed(1)+'%</text>';
+    s+='<text x="'+(W-pr)+'" y="'+(top-12)+'" text-anchor="end">'+(small?"days ahead, bins not to scale":"days booked ahead (bins not to scale)")+'</text>';
         s+='</g>';
     s+='<path id="area" d="" fill="var(--acc)" opacity="0"/><path id="ghost" d="" fill="none" stroke="var(--acc)" stroke-width="1.5" opacity="0"/><path id="line" d="" fill="none" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/><circle id="dot" r="5" fill="var(--acc)"/>';
     svg.setAttribute("viewBox","0 0 "+W+" "+H);svg.innerHTML=s;
@@ -265,17 +259,17 @@ function initHero(){
   function readP(now){
     var max=hero.offsetHeight-stage.offsetHeight;p=RM||max<=0?1:Math.max(autoP(now),clamp((window.scrollY-(hero.offsetTop-48))/max,0,1))}
   function frame(now){
-    readP(now);
+    readP(now);var pm=Math.pow(p,.55);
     if(!RM){intro=clamp((now-t0-250)/2200,0,1)}
     var lim=Math.max(2,Math.round(N*(1-Math.pow(1-intro,3)))),d="",last=0,lx=0,ly=0,ds=Math.pow(1,1);
     var loopI=Math.floor(((now/5200)%1)*(N-1));
     for(var i=0;i<lim;i++){
-      var q=sstep(0,1,clamp(p*1.55-(i/(N-1))*.55,0,1)),x=lerp(xE[i],xC[i],q),y=lerp(yE[i],yC[i],q);
+      var q=sstep(0,1,clamp(pm*1.5-(i/(N-1))*.5,0,1)),x=lerp(xE[i],xC[i],q),y=lerp(yE[i],yC[i],q);
       d+=(i?"L":"M")+x.toFixed(1)+" "+y.toFixed(1);lx=x;ly=y;
       if(i===loopI&&intro>=1){g.dx=x;g.dy=y}}
     var tcol=sstep(.5,.98,p);
     g.line.setAttribute("d",d);g.line.style.stroke="var(--acc)";
-    g.area.setAttribute("d",d+"L"+lx.toFixed(1)+" "+g.bot+"L"+lerp(xE[0],xC[0],sstep(0,1,clamp(p*1.55,0,1))).toFixed(1)+" "+g.bot+"Z");g.area.setAttribute("opacity",(.09*sstep(.6,1,p)).toFixed(3));
+    g.area.setAttribute("d",d+"L"+lx.toFixed(1)+" "+g.bot+"L"+lerp(xE[0],xC[0],sstep(0,1,clamp(pm*1.5,0,1))).toFixed(1)+" "+g.bot+"Z");g.area.setAttribute("opacity",(.09*sstep(.6,1,p)).toFixed(3));
     g.gE.setAttribute("opacity",RM?0:(1-sstep(.2,.75,p)).toFixed(3));g.gC.setAttribute("opacity",sstep(.55,.95,p).toFixed(3));var lE=document.getElementById("lE");if(lE)lE.setAttribute("opacity",sstep(.96,1,p).toFixed(3));
     var dx=intro<1?lx:(g.dx==null?lx:g.dx),dy=intro<1?ly:(g.dy==null?ly:g.dy);
     g.dot.setAttribute("cx",dx);g.dot.setAttribute("cy",dy);g.dot.setAttribute("opacity",RM?0:(1-sstep(.05,.3,p)).toFixed(3));
@@ -294,7 +288,7 @@ function initHero(){
   if(document.fonts)document.fonts.ready.then(layout);
 }
 
-fetch("assets/clinic.json").then(function(r){return r.json()}).then(function(j){D=j;
-  var a=weekAgg({th:"all",vt:"all",ld:"all"});weeklyRev=a.rev.map(function(v){return v/1000});
+fetch("assets/noshow.json").then(function(r){return r.json()}).then(function(x){D=x;
+  weeklyRev=x.curve.map(function(r){return 100*r[2]/r[1]});curveLabels=x.curve.map(function(r){return r[0]});
   initHero();initCase1()}).catch(function(){initHero()});
 })();

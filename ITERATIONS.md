@@ -49,3 +49,6 @@ Remaining defects (not fixed, iteration budget spent): first scroll ticks barely
 | 7 | 8.2 | g 7.5 | d 9 |
 | 8 | 8.0 | a/g 7 | d 9 |
 Stop criteria (every criterion >= 9, two consecutive fresh 10/10 verdicts) NOT met. Lighthouse thresholds met: mobile 96/100/100/100, desktop 100/100/100/100.
+
+## Upgrade after round 8: Case 01 rebuilt on real public data
+Replaced the synthetic clinic with the Kaggle "Medical Appointment No Shows" dataset (Joni Hoppen / Aquarela Analytics, CC BY-NC-SA 4.0; GitHub mirror, no login). Loaded into SQLite; 110,527 rows, 6 dropped, 110,521 analysed; a 315-cell aggregate (assets/noshow.json) ships, not the raw file. The SQL shown on the page is executed against the real database by tools/verify_sql.py: 40 of 40 randomised filter/breakdown combinations match the in-page table exactly. Hero chart now morphs into the real no-show-by-lead-time curve (axis from zero). Hero morph responds from the first scroll tick (eased, hero height 250vh to 200vh). On mobile the Case 01 chart now comes before the filters.

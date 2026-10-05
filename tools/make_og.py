@@ -1,13 +1,14 @@
 import math, json
 from playwright.sync_api import sync_playwright
-rev=[169.3,178.4,164.8,170.7,169.3,176.7,190.9,190.6,201.1,217.2,197.6,197.6]
+import json as _j
+rev=[100*r[2]/r[1] for r in _j.load(open('assets/noshow.json'))['curve']]
 N=500;W=1200;top=372;bot=590;ph=bot-top
 def G(u,c,s,a):return a*math.exp(-((u-c)/s)**2/2)
 def ecg(u):return G(u,.14,.028,-.11)+G(u,.292,.008,.13)+G(u,.325,.0125,-1)+G(u,.362,.011,.3)+G(u,.62,.05,-.22)
-ys=[top+(1-(v-150)/80)*ph for v in rev]
+ys=[top+(1-v/40)*ph for v in rev];K=len(rev)-1
 def cr(f):
-    s=f*11;k=min(10,int(s));t=s-k
-    p0=ys[max(0,k-1)];p1=ys[k];p2=ys[k+1];p3=ys[min(11,k+2)]
+    s=f*K;k=min(K-1,int(s));t=s-k
+    p0=ys[max(0,k-1)];p1=ys[k];p2=ys[k+1];p3=ys[min(K,k+2)]
     return .5*(2*p1+(-p0+p2)*t+(2*p0-5*p1+4*p2-p3)*t*t+(-p0+3*p1-3*p2+p3)*t**3)
 pts=[]
 for i in range(N):
@@ -29,7 +30,7 @@ svg{{position:absolute;left:0;top:0}}
 </style><div class=m style="top:44px">Rajul Raman / Case file</div><div class=m style="top:44px;left:auto;right:60px;color:#5E584C">PT &rarr; BA / PGDM Analytics 2027</div>
 <h1>From <em>patient</em> charts<br>to business charts.</h1>
 <svg width=1200 height=630>{grid}<path d="{d}" fill="none" stroke="#15130F" stroke-width="3.2" stroke-linejoin="round"/></svg>
-<div class=m style="bottom:22px;font-size:15px;color:#5E584C">Healthcare-trained business analyst. Synthetic data.</div>'''
+<div class=m style="bottom:22px;font-size:15px;color:#5E584C">Healthcare-trained business analyst. Real public data, labelled.</div>'''
 open("tools/og.html","w",encoding="utf-8").write(html)
 with sync_playwright() as p:
     b=p.chromium.launch();pg=b.new_page(viewport={"width":1200,"height":630})

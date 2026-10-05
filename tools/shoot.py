@@ -3,7 +3,7 @@ from playwright.sync_api import sync_playwright
 OUT=sys.argv[1] if len(sys.argv)>1 else "screens/r1"
 os.makedirs(OUT,exist_ok=True)
 SIZES=[(375,812),(768,1024),(1440,900)]
-SECTIONS=[("hero0","#top",0),("case1-problem","#case-1",0),("case1-dash","#f-th",-120),("case1-outcome","#out1",-200),("case2-funnel","#funnel",-200),("case2-cohort","#cohort",-200),("case3-map","#pm-as",-220),("case3-to","#pm-to",-220),("timeline","#timeline",0),("toolkit","#toolkit",0),("contact","#contact",0)]
+SECTIONS=[("hero0","#top",0),("case1-problem","#case-1",0),("case1-finds",".finds",-100),("case1-dash","#dash",-80),("case1-sms","#smspairs",-200),("case1-recs",".recs",-120),("case1-outcome","#case-1 .out.real",-200),("case2-funnel","#funnel",-200),("case2-cohort","#cohort",-200),("case3-map","#pm-as",-220),("case3-to","#pm-to",-220),("timeline","#timeline",0),("toolkit","#toolkit",0),("contact","#contact",0)]
 with sync_playwright() as p:
     b=p.chromium.launch()
     for scheme in("light","dark"):
