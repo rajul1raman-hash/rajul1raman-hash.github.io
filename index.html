@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rajul Raman — Healthcare Business Analytics</title>
+<meta name="description" content="Portfolio of Rajul Raman: healthcare business analytics case studies (synthetic / anonymised data).">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#fff;--fg:#14213d;--mut:#5b6678;--card:#f5f7fb;--acc:#1b3160;--gold:#c9a040;--bd:#e1e6ef}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1626;--fg:#e8ecf5;--mut:#9aa6bd;--card:#18223a;--acc:#8fb0ff;--gold:#d9b45a;--bd:#2a3556}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,Segoe UI,Arial,sans-serif}
+main,header,footer{max-width:900px;margin:0 auto;padding:0 16px}
+header{padding-top:40px}h1{font-size:2rem;margin:0}h2{color:var(--acc);margin-top:48px;border-top:3px solid var(--gold);padding-top:14px}h3{margin-bottom:4px}
+.sub{color:var(--mut)}.tag{display:inline-block;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:2px 10px;font-size:.8rem;margin:2px}
+.note{background:var(--card);border-left:4px solid var(--gold);padding:8px 12px;font-size:.9rem;color:var(--mut)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.kpi{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px}.kpi b{font-size:1.4rem;display:block;color:var(--acc)}
+pre{background:var(--card);border:1px solid var(--bd);padding:12px;overflow:auto;font-size:.82rem;border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+.cv{position:relative;height:260px;margin:12px 0}a{color:var(--acc)}svg{max-width:100%;height:auto}
+</style></head><body>
+<header>
+<h1>Rajul Raman</h1>
+<p class="sub">Healthcare Business Analytics &middot; PGDM (Analytics) 2027 &middot; BPT (clinical background) &middot; Gurugram, India</p>
+<p>I combine a physiotherapy clinical background with business analysis: requirements, KPI reporting, SQL and dashboards for healthcare operations. Below are three case studies. <strong>All numbers are synthetic or anonymised; no real company, patient or customer data is shown.</strong></p>
+<p><a href="https://www.linkedin.com/in/rajul-raman-803521123">LinkedIn</a> &middot; rajul1raman@gmail.com &middot; Available from April 2027</p>
+<p><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">BRD / user stories</span><span class="tag">BPMN</span><span class="tag">KPI design</span></p>
+</header>
+<main>
+
+<h2 id="cs1">1. Clinic operations dashboard</h2>
+<p class="note">Synthetic data (seeded generator, 12 weeks, one multi-therapist physiotherapy clinic).</p>
+<h3>Problem</h3><p>A clinic owner saw full diaries but flat revenue. No single view of appointments, no-shows, therapist utilisation and revenue per week.</p>
+<h3>Approach</h3><p>Defined four KPIs (booked appointments, no-show %, therapist utilisation %, realised revenue), modelled appointment/therapist/invoice tables, and built a weekly dashboard (Power BI-style, rendered here with Chart.js).</p>
+<div class="grid" id="k1"></div>
+<div class="cv"><canvas id="c1"></canvas></div><div class="cv"><canvas id="c2"></canvas></div>
+<h3>SQL used</h3>
+<pre>SELECT DATE_TRUNC('week', a.slot_start) AS wk,
+       COUNT(*)                                            AS booked,
+       100.0*SUM(CASE WHEN a.status='no_show' THEN 1 END)/COUNT(*) AS no_show_pct,
+       SUM(a.minutes_delivered)*100.0/SUM(t.available_minutes)     AS utilisation_pct,
+       SUM(i.amount)                                       AS revenue
+FROM appointments a
+JOIN therapists t ON t.id=a.therapist_id
+LEFT JOIN invoices i ON i.appointment_id=a.id
+GROUP BY 1 ORDER BY 1;</pre>
+<h3>Insight</h3><p>In this synthetic scenario no-shows concentrate in first-visit slots booked more than 5 days ahead, and utilisation dips on Tuesday/Friday afternoons.</p>
+<h3>Business impact (illustrative)</h3><p>A reminder plus overbooking rule for far-ahead first visits takes no-shows from ~15% to ~11% and lifts utilisation from ~61% to ~74% over the 12 weeks; average weekly revenue in the last 3 weeks is about 24% above the first 3 in this synthetic model.</p>
+
+<h2 id="cs2">2. E-pharmacy funnel analysis</h2>
+<p class="note">Synthetic numbers. Structure inspired by funnel tracking work on a real e-pharmacy / healthcare platform (IMCURE); no actual company data is shown.</p>
+<h3>Problem</h3><p>Traffic was growing but orders were not. Where do visitors drop, and do first-time buyers come back?</p>
+<h3>Approach</h3><p>Instrumented events (visit, product view, add-to-cart, checkout, order), built the funnel and monthly cohort retention in SQL, then ranked fixes by recoverable orders.</p>
+<div class="cv"><canvas id="c3"></canvas></div>
+<table><tr><th>Cohort</th><th>M0</th><th>M1</th><th>M2</th><th>M3</th></tr>
+<tr><td>Jan</td><td>100%</td><td>24%</td><td>17%</td><td>14%</td></tr><tr><td>Feb</td><td>100%</td><td>27%</td><td>19%</td><td>15%</td></tr><tr><td>Mar</td><td>100%</td><td>31%</td><td>22%</td><td>&ndash;</td></tr></table>
+<h3>SQL used</h3>
+<pre>WITH first_order AS (
+  SELECT user_id, DATE_TRUNC('month', MIN(ordered_at)) AS cohort FROM orders GROUP BY 1)
+SELECT f.cohort,
+       DATE_PART('month', AGE(DATE_TRUNC('month', o.ordered_at), f.cohort)) AS m,
+       COUNT(DISTINCT o.user_id) * 1.0 / COUNT(DISTINCT f.user_id) AS retention
+FROM first_order f JOIN orders o USING (user_id)
+GROUP BY 1,2 ORDER BY 1,2;</pre>
+<h3>Insight</h3><p>The largest leak is cart &rarr; checkout (shipping and prescription-upload friction), not traffic. Repeat rate is highest for chronic-medicine refill buyers.</p>
+<h3>Business impact (illustrative)</h3><p>Recommendations: guest checkout, upload-prescription at cart, refill reminders. Lifting cart&rarr;checkout from 38% to 48% adds ~26% more orders on the same traffic in this synthetic model.</p>
+
+<h2 id="cs3">3. KYC onboarding: as-is &rarr; to-be redesign</h2>
+<p class="note">Anonymised illustration of the type of requirements work done at IMCURE. No invented company metrics; KPI targets are labelled assumptions.</p>
+<h3>Problem</h3><p>Customer onboarding needed KYC but users abandoned the flow and operations re-keyed documents by hand.</p>
+<h3>Approach</h3><p>Mapped the as-is process, found hand-offs and rework, designed a to-be flow, then wrote the BRD excerpt and user stories.</p>
+<svg viewBox="0 0 860 250" role="img" aria-label="As-is versus to-be KYC process map">
+<g font-family="system-ui" font-size="12" fill="currentColor"><text x="10" y="16" font-weight="700">AS-IS (manual)</text>
+<g stroke="currentColor" fill="none"><rect x="10" y="26" width="120" height="44" rx="8"/><rect x="170" y="26" width="120" height="44" rx="8"/><rect x="330" y="26" width="120" height="44" rx="8"/><polygon points="540,24 590,48 540,72 490,48"/><rect x="630" y="26" width="140" height="44" rx="8"/>
+<path d="M130 48H170M290 48H330M450 48H490M590 48H630"/></g>
+<text x="25" y="52">Upload docs</text><text x="180" y="52">Ops re-key data</text><text x="345" y="52">Manual verify</text><text x="520" y="52">Valid?</text><text x="640" y="52">Activate (T+3d)</text>
+<text x="10" y="110" font-weight="700">TO-BE (assisted)</text>
+<g stroke="currentColor" fill="none"><rect x="10" y="120" width="120" height="44" rx="8"/><rect x="170" y="120" width="120" height="44" rx="8"/><rect x="330" y="120" width="120" height="44" rx="8"/><polygon points="540,118 590,142 540,166 490,142"/><rect x="630" y="120" width="140" height="44" rx="8"/><rect x="465" y="190" width="150" height="40" rx="8"/>
+<path d="M130 142H170M290 142H330M450 142H490M590 142H630M540 166V190"/></g>
+<text x="25" y="146">Upload + OCR</text><text x="185" y="146">Auto-extract</text><text x="345" y="146">Rule checks</text><text x="525" y="146">Pass?</text><text x="640" y="146">Activate (T+0)</text><text x="478" y="214">Exceptions to ops queue</text></g></svg>
+<h3>BRD excerpt</h3>
+<p><b>BR-3.</b> The system shall extract identity fields from uploaded documents and pre-fill the form. <b>BR-5.</b> Only mismatches shall be routed to a manual-review queue with a reason code. <b>BR-7.</b> All verification outcomes shall be audit-logged.</p>
+<h3>User stories (acceptance criteria)</h3>
+<table><tr><th>#</th><th>Story</th><th>Acceptance criteria</th></tr>
+<tr><td>1</td><td>As a customer I upload my ID once so I don't retype details.</td><td>Given a clear ID image, fields pre-fill in under 5s; user can edit.</td></tr>
+<tr><td>2</td><td>As a customer I see why a document was rejected.</td><td>Rejection shows reason + retry; no data lost.</td></tr>
+<tr><td>3</td><td>As an ops reviewer I only see exceptions.</td><td>Queue contains only mismatches; each has a reason code.</td></tr>
+<tr><td>4</td><td>As compliance I need an audit trail.</td><td>Every decision stores who/what/when; exportable.</td></tr>
+<tr><td>5</td><td>As a product owner I track drop-off by step.</td><td>Dashboard shows completion rate per step, daily.</td></tr></table>
+<h3>Tools</h3><p>Excel (process timing), SQL (drop-off by step), BPMN-style mapping, BRD and user-story writing.</p>
+<h3>KPI impact (illustrative assumptions)</h3><p class="sub">The only real, resume-verified outcome here: the redesign cut manual verification time by 30% at IMCURE. The table below is a synthetic target model.</p>
+<table><tr><th>KPI</th><th>As-is (assumed)</th><th>To-be target (assumed)</th></tr><tr><td>Time to activation</td><td>~3 days</td><td>same day</td></tr><tr><td>Manual touches per case</td><td>3</td><td>under 1 (exceptions only)</td></tr><tr><td>Flow completion</td><td>baseline</td><td>+15-20 pts</td></tr></table>
+</main>
+<footer><p class="sub">All case-study data is synthetic or anonymised. &copy; Rajul Raman.</p></footer>
+<script>
+Chart.defaults.animation=false;
+new Chart(c3,{type:'bar',data:{labels:['Visits','Product view','Add to cart','Checkout','Order'],datasets:[{label:'Users (synthetic)',data:[10000,5200,1900,720,610],backgroundColor:['#4c9aff','#4c9aff','#4c9aff','#e5384a','#6f9bff']}]},options:{indexAxis:'y',maintainAspectRatio:false}});
+fetch('data_clinic.json').then(r=>r.json()).then(init).catch(()=>{});
+function init(d){
+var sum=function(a){return a.reduce(function(x,y){return x+y},0)},avg=function(a){return sum(a)/a.length};
+document.getElementById('k1').innerHTML=[['Avg weekly appts',Math.round(avg(d.appts))],['No-show wk1 to wk12',d.noshow[0]+'% to '+d.noshow[11]+'%'],['Utilisation wk1 to wk12',d.util[0]+'% to '+d.util[11]+'%'],['Revenue 12 wks (INR k)',Math.round(sum(d.rev)).toLocaleString()]].map(function(k){return '<div class="kpi"><b>'+k[1]+'</b>'+k[0]+'</div>'}).join('');
+new Chart(c1,{type:'bar',data:{labels:d.w,datasets:[{label:'Appointments',data:d.appts,backgroundColor:'#4c9aff',yAxisID:'y',order:2},{label:'Revenue (INR k)',data:d.rev,type:'line',borderColor:'#c9a040',borderWidth:3,yAxisID:'y2',order:1}]},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Appointments'}},y2:{position:'right',grid:{drawOnChartArea:false}}}}});
+new Chart(c2,{type:'line',data:{labels:d.w,datasets:[{label:'No-show %',data:d.noshow,borderColor:'#e5384a'},{label:'Utilisation %',data:d.util,borderColor:'#6f9bff'}]},options:{maintainAspectRatio:false}});}
+</script></body></html>
