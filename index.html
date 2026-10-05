@@ -1,101 +1,314 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Rajul Raman — Healthcare Business Analytics</title>
-<meta name="description" content="Portfolio of Rajul Raman: healthcare business analytics case studies (synthetic / anonymised data).">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-:root{--bg:#fff;--fg:#14213d;--mut:#5b6678;--card:#f5f7fb;--acc:#1b3160;--gold:#c9a040;--bd:#e1e6ef}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1626;--fg:#e8ecf5;--mut:#9aa6bd;--card:#18223a;--acc:#8fb0ff;--gold:#d9b45a;--bd:#2a3556}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,Segoe UI,Arial,sans-serif}
-main,header,footer{max-width:900px;margin:0 auto;padding:0 16px}
-header{padding-top:40px}h1{font-size:2rem;margin:0}h2{color:var(--acc);margin-top:48px;border-top:3px solid var(--gold);padding-top:14px}h3{margin-bottom:4px}
-.sub{color:var(--mut)}.tag{display:inline-block;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:2px 10px;font-size:.8rem;margin:2px}
-.note{background:var(--card);border-left:4px solid var(--gold);padding:8px 12px;font-size:.9rem;color:var(--mut)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.kpi{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px}.kpi b{font-size:1.4rem;display:block;color:var(--acc)}
-pre{background:var(--card);border:1px solid var(--bd);padding:12px;overflow:auto;font-size:.82rem;border-radius:8px}
-table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border:1px solid var(--bd);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
-.cv{position:relative;height:260px;margin:12px 0}a{color:var(--acc)}svg{max-width:100%;height:auto}
-</style></head><body>
-<header>
-<h1>Rajul Raman</h1>
-<p class="sub">Healthcare Business Analytics &middot; PGDM (Analytics) 2027 &middot; BPT (clinical background) &middot; Gurugram, India</p>
-<p>I combine a physiotherapy clinical background with business analysis: requirements, KPI reporting, SQL and dashboards for healthcare operations. Below are three case studies. <strong>All numbers are synthetic or anonymised; no real company, patient or customer data is shown.</strong></p>
-<p><a href="https://www.linkedin.com/in/rajul-raman-803521123">LinkedIn</a> &middot; rajul1raman@gmail.com &middot; Available from April 2027</p>
-<p><span class="tag">SQL</span><span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">BRD / user stories</span><span class="tag">BPMN</span><span class="tag">KPI design</span></p>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rajul Raman | Healthcare-trained business analyst</title>
+<meta name="description" content="Rajul Raman: physiotherapist turned business analyst (PGDM Analytics 2027). Three case files on clinic operations, e-pharmacy funnels and KYC process redesign, built on synthetic data. SQL, Power BI, Excel, requirements.">
+<meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#12110E" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="https://rajul1raman-hash.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rajul Raman">
+<meta property="og:title" content="Rajul Raman | From patient charts to business charts">
+<meta property="og:description" content="Healthcare-trained business analyst. I diagnose processes and treat them with data. Three case files, synthetic data.">
+<meta property="og:url" content="https://rajul1raman-hash.github.io/">
+<meta property="og:image" content="https://rajul1raman-hash.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rajul Raman: an ECG trace turning into a business trend line, with the line 'From patient charts to business charts'.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Rajul Raman | From patient charts to business charts">
+<meta name="twitter:description" content="Healthcare-trained business analyst. Three case files, synthetic data.">
+<meta name="twitter:image" content="https://rajul1raman-hash.github.io/assets/og.png">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css">
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+<script>try{var t=localStorage.getItem("rr-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Rajul Raman","url":"https://rajul1raman-hash.github.io/","jobTitle":"Business analyst (PGDM Analytics, 2027)","alumniOf":[{"@type":"CollegeOrUniversity","name":"SOIL School of Business Design"},{"@type":"CollegeOrUniversity","name":"Galgotias University"}],"sameAs":["https://www.linkedin.com/in/rajul-raman-803521123"],"email":"mailto:rajul1raman@gmail.com"}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar">
+  <div class="wrap mono">
+    <a class="brand" href="#top">R. Raman<span class="lg"> / Case file</span></a>
+    <nav aria-label="Sections">
+      <a href="#cases">Cases</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#contact">Contact</a>
+      <button class="tbtn mono" id="theme" type="button">Dark</button>
+    </nav>
+  </div>
 </header>
-<main>
 
-<h2 id="cs1">1. Clinic operations dashboard</h2>
-<p class="note">Synthetic data (seeded generator, 12 weeks, one multi-therapist physiotherapy clinic).</p>
-<h3>Problem</h3><p>A clinic owner saw full diaries but flat revenue. No single view of appointments, no-shows, therapist utilisation and revenue per week.</p>
-<h3>Approach</h3><p>Defined four KPIs (booked appointments, no-show %, therapist utilisation %, realised revenue), modelled appointment/therapist/invoice tables, and built a weekly dashboard (Power BI-style, rendered here with Chart.js).</p>
-<div class="grid" id="k1"></div>
-<div class="cv"><canvas id="c1"></canvas></div><div class="cv"><canvas id="c2"></canvas></div>
-<h3>SQL used</h3>
-<pre>SELECT DATE_TRUNC('week', a.slot_start) AS wk,
-       COUNT(*)                                            AS booked,
-       100.0*SUM(CASE WHEN a.status='no_show' THEN 1 END)/COUNT(*) AS no_show_pct,
-       SUM(a.minutes_delivered)*100.0/SUM(t.available_minutes)     AS utilisation_pct,
-       SUM(i.amount)                                       AS revenue
-FROM appointments a
-JOIN therapists t ON t.id=a.therapist_id
-LEFT JOIN invoices i ON i.appointment_id=a.id
-GROUP BY 1 ORDER BY 1;</pre>
-<h3>Insight</h3><p>In this synthetic scenario no-shows concentrate in first-visit slots booked more than 5 days ahead, and utilisation dips on Tuesday/Friday afternoons.</p>
-<h3>Business impact (illustrative)</h3><p>A reminder plus overbooking rule for far-ahead first visits takes no-shows from ~15% to ~11% and lifts utilisation from ~61% to ~74% over the 12 weeks; average weekly revenue in the last 3 weeks is about 24% above the first 3 in this synthetic model.</p>
+<main id="main">
+<!-- HERO -->
+<section class="hero" id="top" aria-labelledby="name">
+  <div class="stage">
+    <div class="wrap">
+      <div class="hero-meta mono"><span>Patient: R. Raman, PT &rarr; BA</span><span>Available from April 2027 &middot; <a href="assets/Rajul_Raman_Resume_web.pdf" download>Resume (PDF)</a></span></div>
+      <h1 id="name">Rajul<br class="mb"> <em>Raman</em></h1>
+      <div class="hero-grid">
+        <p class="pos"><b>Healthcare-trained business analyst.</b> I&nbsp;diagnose processes and treat them with&nbsp;data.</p>
+        <div class="stats">
+        <div class="stat"><b>30<sup>%</sup></b><span>less manual verification time from a KYC redesign (imcure)</span></div>
+        <div class="stat"><b>25<sup>%</sup></b><span>less manual reporting effort from an Excel MIS (imcure)</span></div>
+        <div class="stat"><b>20<sup>%</sup></b><span>less documentation time from Excel tracking (Cogniable)</span></div>
+      </div>
+        
+      </div>
+    </div>
+    <div class="ecg-wrap" id="ecgwrap">
+      <div class="cap" aria-hidden="true">
+        <span class="big"><i id="cap1">From patient charts</i><i id="cap2" style="opacity:0">to business charts</i></span>
+        <span class="small mono"><span id="sm1">Lead II &middot; 25 mm/s &middot; 72 bpm</span><span id="sm2" style="opacity:0">Weekly revenue &middot; synthetic clinic &middot; INR k</span></span>
+      </div>
+      <svg id="ecg" role="img" aria-label="An ECG trace that, as you scroll, morphs into a business line chart of weekly revenue."></svg>
+    </div>
+    <div class="wrap">
+      
+      <div class="scrollhint mono"><span>Scroll to run the morph</span><i aria-hidden="true">&darr;</i></div>
+    </div>
+  </div>
+</section>
 
-<h2 id="cs2">2. E-pharmacy funnel analysis</h2>
-<p class="note">Synthetic numbers. Structure inspired by funnel tracking work on a real e-pharmacy / healthcare platform (IMCURE); no actual company data is shown.</p>
-<h3>Problem</h3><p>Traffic was growing but orders were not. Where do visitors drop, and do first-time buyers come back?</p>
-<h3>Approach</h3><p>Instrumented events (visit, product view, add-to-cart, checkout, order), built the funnel and monthly cohort retention in SQL, then ranked fixes by recoverable orders.</p>
-<div class="cv"><canvas id="c3"></canvas></div>
-<table><tr><th>Cohort</th><th>M0</th><th>M1</th><th>M2</th><th>M3</th></tr>
-<tr><td>Jan</td><td>100%</td><td>24%</td><td>17%</td><td>14%</td></tr><tr><td>Feb</td><td>100%</td><td>27%</td><td>19%</td><td>15%</td></tr><tr><td>Mar</td><td>100%</td><td>31%</td><td>22%</td><td>&ndash;</td></tr></table>
-<h3>SQL used</h3>
-<pre>WITH first_order AS (
-  SELECT user_id, DATE_TRUNC('month', MIN(ordered_at)) AS cohort FROM orders GROUP BY 1)
-SELECT f.cohort,
-       DATE_PART('month', AGE(DATE_TRUNC('month', o.ordered_at), f.cohort)) AS m,
-       COUNT(DISTINCT o.user_id) * 1.0 / COUNT(DISTINCT f.user_id) AS retention
-FROM first_order f JOIN orders o USING (user_id)
-GROUP BY 1,2 ORDER BY 1,2;</pre>
-<h3>Insight</h3><p>The largest leak is cart &rarr; checkout (shipping and prescription-upload friction), not traffic. Repeat rate is highest for chronic-medicine refill buyers.</p>
-<h3>Business impact (illustrative)</h3><p>Recommendations: guest checkout, upload-prescription at cart, refill reminders. Lifting cart&rarr;checkout from 38% to 48% adds ~26% more orders on the same traffic in this synthetic model.</p>
+<!-- INTRO -->
+<section class="sec" id="cases" aria-labelledby="cases-h">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="mono">File 01 / Case files</span><h2 id="cases-h">Three case files, <em>worked end to end.</em></h2></div>
+    <div class="intro rv">
+      <p class="l lede">I trained as a physiotherapist, so I read evidence for a living before I read dashboards. Each case below is framed the way a clinician would write it up: presenting problem, diagnosis, treatment, outcome.</p>
+      <div class="r">
+        <p>The data in every case is <strong>synthetic or anonymised</strong>. I generated it for this page, with the effects built in, so the cases demonstrate method (how I frame, query, and communicate), not real-world results. The real outcomes are the three numbers at the top, and they come from my resume.</p>
+        <div class="read"><p class="mono mut">Open to business and data analyst roles. Read in 30 seconds:</p>
+          <ol><li><a href="#case-1"><span class="mono acc">Case 01</span> KPI design <i>clinic dashboard, SQL</i></a></li><li><a href="#case-2"><span class="mono acc">Case 02</span> Funnel diagnosis <i>e-pharmacy, cohorts</i></a></li><li><a href="#case-3"><span class="mono acc">Case 03</span> Requirements <i>KYC as-is to to-be, BRD</i></a></li></ol></div>
+        <p class="mono" style="margin-top:18px">Operate the evidence: filter it, run the SQL, flip the scenario.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h2 id="cs3">3. KYC onboarding: as-is &rarr; to-be redesign</h2>
-<p class="note">Anonymised illustration of the type of requirements work done at IMCURE. No invented company metrics; KPI targets are labelled assumptions.</p>
-<h3>Problem</h3><p>Customer onboarding needed KYC but users abandoned the flow and operations re-keyed documents by hand.</p>
-<h3>Approach</h3><p>Mapped the as-is process, found hand-offs and rework, designed a to-be flow, then wrote the BRD excerpt and user stories.</p>
-<svg viewBox="0 0 860 250" role="img" aria-label="As-is versus to-be KYC process map">
-<g font-family="system-ui" font-size="12" fill="currentColor"><text x="10" y="16" font-weight="700">AS-IS (manual)</text>
-<g stroke="currentColor" fill="none"><rect x="10" y="26" width="120" height="44" rx="8"/><rect x="170" y="26" width="120" height="44" rx="8"/><rect x="330" y="26" width="120" height="44" rx="8"/><polygon points="540,24 590,48 540,72 490,48"/><rect x="630" y="26" width="140" height="44" rx="8"/>
-<path d="M130 48H170M290 48H330M450 48H490M590 48H630"/></g>
-<text x="25" y="52">Upload docs</text><text x="180" y="52">Ops re-key data</text><text x="345" y="52">Manual verify</text><text x="520" y="52">Valid?</text><text x="640" y="52">Activate (T+3d)</text>
-<text x="10" y="110" font-weight="700">TO-BE (assisted)</text>
-<g stroke="currentColor" fill="none"><rect x="10" y="120" width="120" height="44" rx="8"/><rect x="170" y="120" width="120" height="44" rx="8"/><rect x="330" y="120" width="120" height="44" rx="8"/><polygon points="540,118 590,142 540,166 490,142"/><rect x="630" y="120" width="140" height="44" rx="8"/><rect x="465" y="190" width="150" height="40" rx="8"/>
-<path d="M130 142H170M290 142H330M450 142H490M590 142H630M540 166V190"/></g>
-<text x="25" y="146">Upload + OCR</text><text x="185" y="146">Auto-extract</text><text x="345" y="146">Rule checks</text><text x="525" y="146">Pass?</text><text x="640" y="146">Activate (T+0)</text><text x="478" y="214">Exceptions to ops queue</text></g></svg>
-<h3>BRD excerpt</h3>
-<p><b>BR-3.</b> The system shall extract identity fields from uploaded documents and pre-fill the form. <b>BR-5.</b> Only mismatches shall be routed to a manual-review queue with a reason code. <b>BR-7.</b> All verification outcomes shall be audit-logged.</p>
-<h3>User stories (acceptance criteria)</h3>
-<table><tr><th>#</th><th>Story</th><th>Acceptance criteria</th></tr>
-<tr><td>1</td><td>As a customer I upload my ID once so I don't retype details.</td><td>Given a clear ID image, fields pre-fill in under 5s; user can edit.</td></tr>
-<tr><td>2</td><td>As a customer I see why a document was rejected.</td><td>Rejection shows reason + retry; no data lost.</td></tr>
-<tr><td>3</td><td>As an ops reviewer I only see exceptions.</td><td>Queue contains only mismatches; each has a reason code.</td></tr>
-<tr><td>4</td><td>As compliance I need an audit trail.</td><td>Every decision stores who/what/when; exportable.</td></tr>
-<tr><td>5</td><td>As a product owner I track drop-off by step.</td><td>Dashboard shows completion rate per step, daily.</td></tr></table>
-<h3>Tools</h3><p>Excel (process timing), SQL (drop-off by step), BPMN-style mapping, BRD and user-story writing.</p>
-<h3>KPI impact (illustrative assumptions)</h3><p class="sub">The only real, resume-verified outcome here: the redesign cut manual verification time by 30% at IMCURE. The table below is a synthetic target model.</p>
-<table><tr><th>KPI</th><th>As-is (assumed)</th><th>To-be target (assumed)</th></tr><tr><td>Time to activation</td><td>~3 days</td><td>same day</td></tr><tr><td>Manual touches per case</td><td>3</td><td>under 1 (exceptions only)</td></tr><tr><td>Flow completion</td><td>baseline</td><td>+15-20 pts</td></tr></table>
+<!-- CASE 01 -->
+<section class="sec" style="padding-top:64px" aria-label="Case files">
+<div class="wrap">
+<article class="case" id="case-1" aria-labelledby="c1-h">
+  <div class="case-head rv">
+    <div class="tag mono"><span><b>Case 01</b></span><span>Clinic operations</span><span>Synthetic data &middot; 12 weeks &middot; 4 therapists</span></div>
+    <h3 id="c1-h">Full diaries, <em>stalled</em> revenue.</h3>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>01 Presenting problem<small>What the owner could see</small></div></div>
+    <div class="body">
+      <p class="big">A four-therapist physiotherapy clinic looked busy every week, yet revenue would not move and nobody could say why.</p>
+      <p>Appointments, no-shows, therapist hours and invoices lived in separate places, so the owner had volume but no view of what a booked slot was actually worth. I defined four numbers to answer with: booked appointments, no-show rate, share of therapist capacity used, and revenue.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>02 Diagnosis<small>Slice the diary until the leak shows</small></div></div>
+    <div class="body">
+      <div class="filters" role="group" aria-label="Dashboard filters">
+        <fieldset><legend class="mono">Therapist</legend><div class="seg" id="f-th"></div></fieldset>
+        <fieldset><legend class="mono">Visit type</legend><div class="seg" id="f-vt"></div></fieldset>
+        <fieldset><legend class="mono">Booked ahead</legend><div class="seg" id="f-ld"></div></fieldset>
+      </div>
+      <div class="kpis" id="kpis" aria-live="polite"></div>
+      <div class="metrics" role="group" aria-label="Metric shown in chart" id="metrics"></div>
+      <div class="chart" id="chart1"></div>
+      <p class="mono mut" style="margin:6px 0 0;font-size:11px" id="chart1-note"></p>
+      <ul class="seglist" id="seglist" aria-label="No-show rate by segment, weeks 1 to 6"></ul>
+      <p style="margin-top:22px">Cut by visit type and booking lead time, the pattern isolates itself: <strong>first visits booked more than five days ahead no-show at <span id="d-hot">27.6%</span></strong> in weeks 1&ndash;6, against <span id="d-rest">4.9&ndash;11.4%</span> for every other segment. Try the filters: pick &ldquo;First visit&rdquo; and &ldquo;&gt;5 days&rdquo;.</p>
+      <div class="sql" id="sql1"></div>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>03 Treatment<small>The smallest change that hits the leak</small></div></div>
+    <div class="body">
+      <p>From week 7 (the dashed line on the chart): an automated reminder for any visit booked more than five days ahead, and up to two overbooked slots per therapist per week on far-ahead first visits, so a no-show no longer leaves an empty hour. In the model, nothing else changes: same therapists, same fees, same hours.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>04 Outcome<small>Weeks 1&ndash;6 vs weeks 7&ndash;12</small></div></div>
+    <div class="body">
+      <p class="mono acc" style="margin:0 0 8px;font-size:11px">Synthetic outcome, effect built into the generator</p>
+      <div class="out syn" id="out1"></div>
+      <p class="note">Synthetic data: the treatment effect was written into the generator, so this shows how I would measure a change like this, not that it would happen. Generator and seed are in the repository (<span class="mono" style="text-transform:none">tools/gen_data.py</span>).</p>
+    </div>
+  </div>
+</article>
+
+<!-- CASE 02 -->
+<article class="case" id="case-2" aria-labelledby="c2-h">
+  <div class="case-head rv">
+    <div class="tag mono"><span><b>Case 02</b></span><span>E-pharmacy funnel</span><span>Synthetic numbers &middot; 10,000 visits</span></div>
+    <h3 id="c2-h">Traffic climbing, orders <em>standing still.</em></h3>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>01 Presenting problem<small>What the dashboard said</small></div></div>
+    <div class="body">
+      <p class="big">An online pharmacy&rsquo;s visits kept rising while orders did not. Where do people leave, and do first-time buyers come back?</p>
+      <p class="note">Structured on the kind of funnel and conversion tracking I set up at imcure (Google Ads conversion tracking, partner-API journeys). No real company, customer or order data is shown.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>02 Diagnosis<small>Event funnel and monthly cohorts</small></div></div>
+    <div class="body">
+      <div class="fnbar">
+        <fieldset><legend class="sr">Funnel scenario</legend><div class="seg" id="f-fn"></div></fieldset>
+        <span class="mono mut" id="fn-note" style="font-size:11px"></span>
+      </div>
+      <div class="funnel" id="funnel" role="img" aria-label="Funnel from 10,000 visits to 610 orders"></div>
+      <p style="margin-top:20px">The biggest leak is not traffic. <span id="fn-leak">Browsing drop-off is expected. <strong>Among shoppers with intent, 1,180 of 1,900 carts (62%) never reach checkout</strong>: the steepest fall after the product page, and the step where shipping cost and prescription upload first appear.</span></p>
+      <div class="sql" id="sql2"></div>
+      <p style="margin-top:32px" class="mono mut">Repeat purchase by first-order month (synthetic)</p>
+      <table class="cohort" id="cohort" aria-label="Cohort retention table"></table>
+      <p style="margin-top:14px">Retention is improving cohort over cohort (month-1 return 24% &rarr; 27% &rarr; 31%), so the problem is conversion earlier in the funnel, not loyalty after it.</p>
+      <div class="sql" id="sql3"></div>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>03 Treatment<small>Ranked by orders recoverable</small></div></div>
+    <div class="body">
+      <p>Three changes, in order: <strong>guest checkout</strong> (no forced sign-up before payment); <strong>prescription upload at the cart</strong>, with a clear reason if a file is rejected; <strong>refill reminders</strong> for repeat buyers. Flip the funnel above to &ldquo;After treatment&rdquo; to see the scenario.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>04 Outcome<small>Scenario, not a measurement</small></div></div>
+    <div class="body">
+      <p class="mono acc" style="margin:0 0 8px;font-size:11px">Scenario, not a measurement</p>
+      <div class="out syn">
+        <div><b>38<small>%</small> &rarr; 48<small>%</small></b><span>Cart to checkout, assumed target</span></div>
+        <div><b>+26<small>%</small></b><span>Orders from the same traffic (610 &rarr; 772)</span></div>
+        <div><b>10,000</b><span>Visits, unchanged</span></div>
+      </div>
+      <p class="note">Assumes the checkout-to-order rate holds at 84.7%. It is a what-if to size the prize and prioritise, to be validated with an A/B test.</p>
+    </div>
+  </div>
+</article>
+
+<!-- CASE 03 -->
+<article class="case" id="case-3" aria-labelledby="c3-h">
+  <div class="case-head rv">
+    <div class="tag mono"><span><b>Case 03</b></span><span>KYC onboarding</span><span>Anonymised &middot; as-is &rarr; to-be</span></div>
+    <h3 id="c3-h">Three hand-offs <em>to say yes.</em></h3>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>01 Presenting problem<small>What users and operations felt</small></div></div>
+    <div class="body">
+      <p class="big">Customers needed KYC before activation, but the process was manual: documents uploaded, then re-keyed, then checked by hand.</p>
+      <p class="note">An anonymised illustration of the requirements work I did at imcure. The one measured result is real and on my resume: <strong>manual verification time cut by 30%</strong>. Every other figure on this case is a labelled assumption.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>02 Diagnosis<small>As-is map: where time and rework sit</small></div></div>
+    <div class="body">
+      <div class="pm" id="pm-as" data-mode="as"></div>
+      <p style="margin-top:18px">Mapping the as-is flow exposes three hand-offs and one rework loop: every invalid document sends the customer back to the start, and an operator re-types data the customer already entered.</p>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>03 Treatment<small>To-be map, BRD excerpt, user stories</small></div></div>
+    <div class="body">
+      <div class="pm" id="pm-to" data-mode="to"></div>
+      <p style="margin:18px 0 10px" class="mono mut">BRD excerpt</p>
+      <div class="brd"><b>BR-3</b> The system shall extract identity fields from uploaded documents and pre-fill the form.<br><b>BR-5</b> Only mismatches shall be routed to a manual-review queue, each with a reason code.<br><b>BR-7</b> All verification outcomes shall be audit-logged.</div>
+      <p class="mono mut" style="margin:0 0 6px">User stories and acceptance criteria</p>
+      <table class="story">
+        <thead><tr><th>#</th><th>Story</th><th>Acceptance criteria</th></tr></thead>
+        <tbody>
+        <tr><td>1</td><td>As a customer, I upload my ID once so I don&rsquo;t retype details.</td><td class="gwt">Given a clear ID image, fields pre-fill in under 5 seconds and stay editable.</td></tr>
+        <tr><td>2</td><td>As a customer, I see why a document was rejected.</td><td class="gwt">Rejection shows a reason and a retry; no entered data is lost.</td></tr>
+        <tr><td>3</td><td>As an ops reviewer, I only see exceptions.</td><td class="gwt">Queue holds only mismatches, each with a reason code.</td></tr>
+        <tr><td>4</td><td>As compliance, I need an audit trail.</td><td class="gwt">Every decision stores who, what and when; exportable.</td></tr>
+        <tr><td>5</td><td>As a product owner, I track drop-off by step.</td><td class="gwt">Dashboard shows completion rate per step, daily.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="stage-row rv">
+    <div class="lab mono"><div>04 Outcome<small>One real number, two assumptions</small></div></div>
+    <div class="body">
+      <div class="out real">
+        <div><b>30<small>%</small></b><span>Less manual verification time. <strong>Measured, imcure, from my resume.</strong></span></div>
+        <div><b>3d &rarr; 0</b><span>Time to activation (assumed, illustrative)</span></div>
+        <div><b>3 &rarr; &lt;1</b><span>Manual touches per case (assumed target)</span></div>
+      </div>
+      <table class="assump"><thead><tr><th>KPI</th><th>As-is (assumed)</th><th>To-be target (assumed)</th></tr></thead>
+      <tbody><tr><td>Time to activation</td><td>about 3 days</td><td>same day</td></tr><tr><td>Manual touches per case</td><td>3</td><td>under 1, exceptions only</td></tr><tr><td>Flow completion</td><td>baseline</td><td>+15 to 20 points</td></tr></tbody></table>
+    </div>
+  </div>
+</article>
+</div>
+</section>
+
+<!-- TIMELINE -->
+<section class="sec" id="timeline" aria-labelledby="tl-h">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="mono">File 02 / History</span><h2 id="tl-h">Bedside <em>to boardroom.</em></h2></div>
+    <ol class="tl">
+      <li class="rv"><div class="when mono">2019 &ndash; 2023</div><div class="what"><h3>BPT, <em>Galgotias University</em></h3><p>Bachelor of Physiotherapy, 76.4%. Published a cross-sectional screening study of 205 students for adolescent idiopathic scoliosis (Adams forward bend test, scoliometer): <a href="https://doi.org/10.9790/0853-2405047179">IOSR-JDMS, Vol. 24 Issue 5, pp. 71-79</a>.</p></div><div class="where mono">Clinical</div></li>
+      <li class="rv"><div class="when mono">Sep 2023 &ndash; Mar 2024</div><div class="what"><h3>Intern, <em>Park Hospital</em></h3><p>Coordinated across wards with doctors, nurses and admin teams; handled high-volume documentation and reporting with zero compliance issues.</p></div><div class="where mono">Clinical</div></li>
+      <li class="rv"><div class="when mono">Apr 2024 &ndash; Apr 2025</div><div class="what"><h3>Physiotherapist, <em>Cogniable</em></h3><p>Gathered needs from multidisciplinary teams and parents, ran 20+ client progress meetings with structured outcome reports, and introduced Excel tracking that cut documentation time by 20%. Six-plus parent sessions lifted home compliance by 35%.</p></div><div class="where mono">Clinical &rarr; analytical</div></li>
+      <li class="rv"><div class="when mono">Apr 2026 &ndash; Jun 2026</div><div class="what"><h3>Business Development Intern, <em>imcure</em></h3><p>Redesigned manual KYC into digital onboarding (30% less manual verification time); built an Excel and Google Sheets MIS for policy and sales reporting (25% less manual effort); integrated diagnostics-lab and doctor-consultation partner APIs; set up Google Ads conversion tracking; owned the website build across 10+ pages.</p></div><div class="where mono">Business</div></li>
+      <li class="rv now"><div class="when mono">2025 &ndash; 2027</div><div class="what"><h3>PGDM (Analytics), <em>SOIL School of Business Design</em></h3><p>Gurgaon. Graduating 2027, available from April 2027. IBM Data Fundamentals (2025); LinkedIn Learning, Getting Started with Power BI (2025).</p></div><div class="where mono">Analytics</div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- TOOLKIT -->
+<section class="sec" id="toolkit" aria-labelledby="tk-h">
+  <div class="wrap">
+    <div class="sec-head rv"><span class="mono">File 03 / Evidence</span><h2 id="tk-h">Toolkit, <em>and where it shows.</em></h2></div>
+    <table class="tk rv">
+      <thead><tr><th scope="col">Tool</th><th scope="col">Where you can see it used</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">SQL</th><td>Weekly clinic KPIs with joins and conditional aggregates, funnel and cohort retention queries; the Case 01 query rewrites itself as you filter. Credential: IBM Data Fundamentals (2025).<br><a href="#case-1">Case 01</a><a href="#case-2">Case 02</a></td></tr>
+        <tr><th scope="row">Power BI</th><td>Dashboard thinking (KPI definitions, filters, annotation) applied in Case 01, which is hand-built in SVG on this page, not a Power BI file. Credential: LinkedIn Learning, <em>Getting Started with Power BI</em> (2025).<br><a href="#case-1">Case 01</a></td></tr>
+        <tr><th scope="row">Excel &amp; Sheets</th><td><strong>25% less manual reporting</strong> from the imcure MIS (policy and sales data flows, KPI tracking); <strong>20% less documentation time</strong> with Excel tracking at Cogniable.<br><a href="#timeline">Timeline</a></td></tr>
+        <tr><th scope="row">Requirements &amp; BRD</th><td>As-is to to-be KYC redesign (<strong>30% less manual verification time</strong>), BRD excerpt and five user stories with acceptance criteria in Case 03; 4+ cross-team deliverables at imcure.<br><a href="#case-3">Case 03</a></td></tr>
+        <tr><th scope="row">Python &amp; R</th><td>PGDM coursework and projects; less than one year of experience.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact" aria-labelledby="ct-h">
+  <div class="wrap"><div class="inner">
+    <span class="mono">File 04 / Contact</span>
+    <h2 id="ct-h">Available from <em>April 2027.</em></h2>
+    <div class="rows">
+      <div class="crow"><span class="mono mut">Email</span><a href="mailto:rajul1raman@gmail.com">rajul1raman@gmail.com</a></div>
+      <div class="crow"><span class="mono mut">LinkedIn</span><a href="https://www.linkedin.com/in/rajul-raman-803521123" rel="me">linkedin.com/<wbr>in/<wbr>rajul-raman-803521123</a></div>
+      <div class="crow"><span class="mono mut">Resume</span><span class="v"><a class="btn" href="assets/Rajul_Raman_Resume_web.pdf" download>Download resume (PDF)</a></span></div>
+      <div class="crow"><span class="mono mut">Base</span><span class="v">Gurugram, India</span></div>
+    </div>
+  </div></div>
+</section>
 </main>
-<footer><p class="sub">All case-study data is synthetic or anonymised. &copy; Rajul Raman.</p></footer>
-<script>
-Chart.defaults.animation=false;
-new Chart(c3,{type:'bar',data:{labels:['Visits','Product view','Add to cart','Checkout','Order'],datasets:[{label:'Users (synthetic)',data:[10000,5200,1900,720,610],backgroundColor:['#4c9aff','#4c9aff','#4c9aff','#e5384a','#6f9bff']}]},options:{indexAxis:'y',maintainAspectRatio:false}});
-fetch('data_clinic.json').then(r=>r.json()).then(init).catch(()=>{});
-function init(d){
-var sum=function(a){return a.reduce(function(x,y){return x+y},0)},avg=function(a){return sum(a)/a.length};
-document.getElementById('k1').innerHTML=[['Avg weekly appts',Math.round(avg(d.appts))],['No-show wk1 to wk12',d.noshow[0]+'% to '+d.noshow[11]+'%'],['Utilisation wk1 to wk12',d.util[0]+'% to '+d.util[11]+'%'],['Revenue 12 wks (INR k)',Math.round(sum(d.rev)).toLocaleString()]].map(function(k){return '<div class="kpi"><b>'+k[1]+'</b>'+k[0]+'</div>'}).join('');
-new Chart(c1,{type:'bar',data:{labels:d.w,datasets:[{label:'Appointments',data:d.appts,backgroundColor:'#4c9aff',yAxisID:'y',order:2},{label:'Revenue (INR k)',data:d.rev,type:'line',borderColor:'#c9a040',borderWidth:3,yAxisID:'y2',order:1}]},options:{maintainAspectRatio:false,scales:{y:{beginAtZero:true,title:{display:true,text:'Appointments'}},y2:{position:'right',grid:{drawOnChartArea:false}}}}});
-new Chart(c2,{type:'line',data:{labels:d.w,datasets:[{label:'No-show %',data:d.noshow,borderColor:'#e5384a'},{label:'Utilisation %',data:d.util,borderColor:'#6f9bff'}]},options:{maintainAspectRatio:false}});}
-</script></body></html>
+
+<footer>
+  <div class="wrap">
+    <p>All case-study data on this page is synthetic or anonymised; no real patient, customer or company data is shown. Resume facts (employers, dates, percentages) are as stated on my resume.</p>
+    <p class="mono">&copy; Rajul Raman</p>
+  </div>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>
