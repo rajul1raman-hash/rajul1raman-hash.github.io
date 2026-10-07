@@ -3,4 +3,4 @@
 :HL["/portrait.jpg","image",{"fetchPriority":"high"}]
 :HL["/logos/soil.png","image"]
 :HL["/logos/galgotias_icon.png","image"]
-0:{"buildId":"dzCVLJZMSylzb6BMeA5Cy","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"v5D85MVo9vxzO1FxKhNOB","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
