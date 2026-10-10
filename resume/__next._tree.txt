@@ -1,6 +1,5 @@
 :HL["/_next/static/chunks/78f059e5b8eac05f.css","style"]
 :HC["/",""]
 :HL["/logos/imcure.png","image"]
-:HL["/logos/cogniable.png","image"]
 :HL["/logos/park_icon.png","image"]
-0:{"buildId":"7hG77dcPsBp2HweVcpabr","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"resume","paramType":null,"paramKey":"resume","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
+0:{"buildId":"TSQME3hX2ARV71_AaxdUw","tree":{"name":"","paramType":null,"paramKey":"","hasRuntimePrefetch":false,"slots":{"children":{"name":"resume","paramType":null,"paramKey":"resume","hasRuntimePrefetch":false,"slots":{"children":{"name":"__PAGE__","paramType":null,"paramKey":"__PAGE__","hasRuntimePrefetch":false,"slots":null,"isRootLayout":false}},"isRootLayout":false}},"isRootLayout":true},"staleTime":300}
